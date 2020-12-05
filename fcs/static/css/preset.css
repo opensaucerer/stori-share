@@ -1,0 +1,10 @@
+.nav-icon {
+    border-radius: 50% !important;
+    width: 35px !important;
+    height: 35px !important;
+
+}
+
+.link-nohover:hover {
+    text-decoration: none !important;
+}

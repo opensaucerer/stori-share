@@ -1,0 +1,25 @@
+section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+    margin-bottom: 0;
+
+}
+
+@media (min-width: 768px) {
+    section {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+    }
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+section h1 {
+    font-weight: 500;
+}
+
+section .container {
+    max-width: 60rem;
+}

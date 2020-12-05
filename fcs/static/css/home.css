@@ -1,0 +1,56 @@
+@media (min-width: 992px) {
+    main {
+        margin-left: 70px;
+        margin-right: 70px;
+    }
+}
+
+
+.img-fluid {
+    border-radius: 50% !important;
+    width: 30px !important;
+    height: 30px !important;
+
+}
+
+.clicked {
+    color: red !important;
+}
+
+.fa-heart,
+.fa-bookmark {
+    font-size: 15px;
+    cursor: pointer !important;
+}
+
+@media (min-width: 768px) {
+    .col-md-4 {
+        -webkit-box-flex: 0;
+        -ms-flex: 0 0 33.3%;
+        flex: 0 0 33.3%;
+        max-width: 33.3%;
+    }
+}
+
+
+.btn-outline-secondary:hover {
+    background-color: #1890ff !important;
+}
+
+
+@media (max-width: 768px) and (min-width: 460px) {
+    .font-size-16 {
+        height: 105px !important;
+    }
+}
+
+@media (max-width: 490px) {
+    .font-size-16 {
+        height: 55px !important;
+    }
+}
+
+
+.font-size-16 {
+    height: 80px;
+}

@@ -1,0 +1,81 @@
+html,
+body {
+    height: 100%;
+}
+
+h4.h3 {
+    text-align: center !important;
+
+}
+
+p.text-center {
+    margin-bottom: 2px !important;
+}
+
+
+@media (max-width: 490px) {
+    .editor {
+        max-width: auto !important;
+    }
+}
+
+@media (min-width: 990px) {
+
+    .form-signin {
+
+        max-width: 90% !important;
+
+    }
+
+}
+
+small {
+    font-size: 11px !important;
+}
+
+.form-signin {
+    padding: 15px;
+    margin: auto;
+
+}
+
+.editor {
+    margin-bottom: 20px !important;
+    height: 400px !important;
+    z-index: 0 !important;
+}
+
+
+.form-signin .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+
+}
+
+.form-signin .form-control:focus {
+    z-index: 2;
+}
+
+.alert {
+    position: sticky !important;
+    top: 0 !important;
+    animation: alert 3s infinite;
+    z-index: 2;
+}
+
+@keyframes alert {
+    from {
+        display: block;
+    }
+
+    to {
+        display: none !important;
+    }
+}
+
+.file-names {
+    word-break: break-word;
+}

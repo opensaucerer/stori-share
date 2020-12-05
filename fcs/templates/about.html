@@ -1,0 +1,64 @@
+<!-- Including the preset html file -->
+{% extends "preset.html" %}
+<!-- Including the preset html file end -->
+
+<!-- Block content Overwrite -->
+{% block content %}
+
+<!-- Link to custom CSS -->
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/about.css') }}"
+/>
+
+<!-- Link to custom CSS end -->
+
+<!-- About Page Container -->
+<section class="text-center">
+  <div class="container">
+    <h1>Everyone Has A Story To Tell</h1>
+    <p class="text-muted">
+      Everyone has a story to tell. Some are written in the books and some are
+      confined to hearts. People want to read stories. They want to read our
+      stories — they want to know where we are from, what we are doing, who we
+      love, and where we are going.
+    </p>
+    <p class="text-muted">
+      They also want us to read their stories, but the problem is we all need a
+      place to freely share our stories — Here's one.
+    </p>
+    <p class="text-muted">
+      Whatever it is - News, Jokes, Life Stories, Messages, Lifestyle,
+      Fashion... — Start Telling Your Stories Now!
+    </p>
+
+    <!-- Sign Up and Log In Links -->
+    {% if current_user.is_authenticated %}
+    <div class="btn-group">
+      <div class="btn-group">
+        <a
+          type="button"
+          class="btn btn-primary active btn-md"
+          href="{{ url_for('dashboard', username=current_user.username) }}"
+        >
+          Dashboard
+        </a>
+      </div>
+    </div>
+
+    {% else %}
+    <p>
+      <a href="{{ url_for('register') }}" class="btn btn-md">Sign Up</a>
+      <a href="{{ url_for('login') }}" class="btn btn-primary btn-md"
+        >Sign In</a
+      >
+    </p>
+    {% endif %}
+
+    <!-- Sign Up and Log In Links end -->
+  </div>
+</section>
+<!-- About Page Container end -->
+
+{% endblock content%}
+<!-- Block content Overwrite end -->

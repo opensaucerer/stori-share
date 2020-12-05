@@ -1,0 +1,122 @@
+<!-- Including the preset html file -->
+{% extends "preset.html" %}
+<!-- Including the preset html file end -->
+
+<!-- Block content Overwrite -->
+{% block content %}
+
+<div style="display: none" class="alert" role="alert">
+  <button class="close" data-dismiss="alert" type="button" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <h4 class="alert-heading text-center"></h4>
+</div>
+
+<!-- Link to Custom CSS -->
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/new_story.css') }}"
+/>
+<!-- Link to Custom CSS end -->
+
+<div class="container">
+  <div class="content-section form-signin">
+    <!-- Rendering Sign In Form  -->
+    <form method="POST" enctype="multipart/form-data">
+      {{form.hidden_tag()}}
+
+      <fieldset class="form-group">
+        <h4 class="h3 mb-2 font-weight-normal border-bottom">
+          Edit Your Story
+        </h4>
+
+        <div class="form-group">
+          {{form.title.label(class="form-control-label")}}
+          {{form.title(class="form-control")}}
+        </div>
+        <small
+          id="small1"
+          class="invalid-feedback"
+          style="position: relative; top: -10px; padding: 0; margin: 0"
+        ></small>
+
+        <div class="form-group">
+          {{form.content.label(class="form-control-label")}}
+          <div class="editor form-control" required="required"></div>
+        </div>
+        <small
+          id="small2"
+          class="invalid-feedback"
+          style="
+            position: relative;
+            top: -10px;
+            padding: 0;
+            margin: 0;
+            height: 10px;
+          "
+        ></small>
+
+        <div id="fg" class="form-group">
+          <div class="custom-file">
+            <input
+              type="file"
+              id="file-input-6"
+              onchange="ValidateSingleInput(this)"
+              ;
+            />
+            <label for="file-input-6">Add A Story Image</label>
+          </div>
+          <small id="fb" class="invalid-feedback"></small>
+        </div>
+
+        <div class="form-group submit">
+          <button
+            id="submit"
+            class="btn btn-lg btn-primary btn-block"
+            type="button"
+          >
+            <i class="fa"></i> Update
+          </button>
+        </div>
+      </fieldset>
+    </form>
+
+    <!-- Rendering Sign In Form End -->
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    function editor() {
+      tinymce.init({
+        selector: ".editor",
+        setup: function (editor) {
+          editor.on("init", function (e) {
+            editor.setContent("{{content | safe}}");
+          });
+        },
+        skin: skin,
+        content_css: theme,
+        inline: true,
+        plugins: " autosave lists",
+        autosave_interval: "10s",
+        autosave_restore_when_empty: true,
+        autosave_ask_before_unload: false,
+        toolbar:
+          "undo redo | styleselect | bold italic forecolor backcolor |" +
+          "alignleft aligncenter alignright alignjustify |" +
+          "bullist numlist outdent indent",
+      });
+    }
+
+    editor();
+  };
+</script>
+
+<script src="{{ url_for('static', filename='js/tinymce/js/tinymce/tinymce.min.js') }}"></script>
+<!-- Link to custom JavaScript -->
+<script src="{{ url_for('static', filename='js/edit_story.js') }}"></script>
+<!-- Link to custom JavaScript end -->
+
+{% endblock content %}
+<!-- Block content Overwrite end -->

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- This will be fired if javascript is disabled in the client's browser-->
+    <noscript>
+      You currently have JavaScript disabled. This App requires JavaScript.<br />
+      Enable JavaScript in Your Browser to Continue Telling your Story!
+    </noscript>
+
+    <!-- Halfmoon CSS -->
+    <!-- <link
+      href="https://cdn.jsdelivr.net/gh/halfmoonui/halfmoon@1.0.3/css/halfmoon.min.css"
+      rel="stylesheet"
+    /> -->
+    <link
+      href=" {{ url_for('static', filename='css/halfmoon-1.0.4/css/halfmoon.min.css') }} "
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS -->
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/preset.css') }}"
+    />
+
+    <!-- Custom JS -->
+
+    <script
+      defer
+      src="{{ url_for('static', filename='js/preset.js') }}"
+    ></script>
+
+    <!-- Font awesome -->
+
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0="
+      crossorigin="anonymous"
+    /> -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/fontawesome-free-5.12.0-web/css/all.min.css') }}"
+    />
+
+    <!-- Roboto font (Used when Apple system fonts are not available) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Favicon and Title -->
+    <link
+      rel="icon"
+      href="{{ url_for('static', filename='img/halfmoon-icon.png') }}"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}"
+    />
+    <!-- Link to Custom CSS end -->
+
+    {% if title %}
+
+    <title>{{ title }}</title>
+
+    {% else %}
+
+    <title>Fun College Stories | Stories Feed</title>
+
+    {% endif %}
+  </head>
+
+  <body
+    class="dark-mode with-custom-webkit-scrollbars with-custom-css-scrollbars"
+    data-sidebar-shortcut-enabled="true"
+    data-dm-shortcut-enabled="true"
+  >
+    <!-- Page wrapper start -->
+    <div id="page-wrapper" class="page-wrapper with-navbar">
+      <!-- Navbar start -->
+      <nav class="navbar">
+        <a href="{{ url_for('home') }}" class="navbar-brand ml-10 ml-sm-15">
+          FCS
+        </a>
+        <ul class="navbar-nav hidden-sm-and-down">
+          <li class="nav-item">
+            <a href="{{ url_for('home') }}" class="nav-link">Stories Feed</a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url_for('about') }}" class="nav-link">About</a>
+          </li>
+
+          <!-- Changing nav item based on user session (show {logout} if user is {signed in}) -->
+          {% if current_user.is_authenticated %}
+
+          <li class="nav-item active">
+            <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+          </li>
+          {% else %}
+          <li class="nav-item active">
+            <a href="{{ url_for('register') }}" class="nav-link">Sign Up</a>
+          </li>
+          {% endif %}
+        </ul>
+        <!-- Changing nav item based on user session (show {logout} if user is {signed in}) end -->
+
+        <div class="navbar-content ml-auto">
+          {% if current_user.is_authenticated %}
+          <div class="navbar-content ml-auto">
+            <!-- Create New Story -->
+            <a
+              href="{{ url_for('new_story') }}"
+              style="padding-right: 0.3rem"
+              class="nav-link"
+            >
+              <i
+                class="fa fa-pen"
+                aria-hidden="true"
+                style="font-size: 18px"
+              ></i>
+            </a>
+            <!-- Create New Story End-->
+            {% endif %}
+
+            <!-- Search Icon -->
+            <a href="{{ url_for('home') }}" class="nav-link">
+              <i
+                class="fa fa-search"
+                aria-hidden="true"
+                style="font-size: 18px"
+              ></i>
+            </a>
+            <!-- Search Icon End -->
+
+            <!-- Dark Mode Toggler -->
+            <div class="custom-switch">
+              <input
+                type="checkbox"
+                id="switch-2"
+                value=""
+                checked="checked"
+                aria-label="Toggle dark mode"
+              />
+              <label for="switch-2" class="mr-5"></label>
+            </div>
+          </div>
+          <!-- Dark Mode Toggler End -->
+
+          <!-- Changing nav item based on user session (show {logout} if user is {signed in}) -->
+          {% if current_user.is_authenticated %}
+          <a
+            href="{{ url_for('dashboard', username=current_user.username) }}"
+            class="hidden-sm-and-down"
+            role="button"
+          >
+            <img
+              src="{{ url_for('static', filename='img/profile_pic/' + current_user.profile_pic) }}"
+              class="nav-icon"
+              alt="Profile Picture"
+            />
+          </a>
+          {% else %}
+          <a
+            href="{{ url_for('login') }}"
+            class="btn btn-primary hidden-sm-and-down"
+            role="button"
+          >
+            Sign In
+          </a>
+          {% endif %}
+          <!-- Changing nav item based on user session (show {logout} if user is {signed in}) end -->
+
+          <!-- Dropdown Menu -->
+
+          <div class="dropdown with-arrow hidden-md-and-up">
+            <!-- Adding user profile picture as menu icon is logged in -->
+            {% if current_user.is_authenticated %}
+            <div
+              data-toggle="dropdown"
+              type="button"
+              id="navbar-dropdown-toggle-btn"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <img
+                src="{{ url_for('static', filename='img/profile_pic/' + current_user.profile_pic) }}"
+                class="nav-icon"
+                alt="Profile Picture"
+              />
+            </div>
+            {% else %}
+
+            <button
+              class="btn"
+              data-toggle="dropdown"
+              type="button"
+              style="width: 70px"
+              id="navbar-dropdown-toggle-btn-1"
+            >
+              Menu
+              <i class="fa fa-angle-down" aria-hidden="true"></i>
+            </button>
+            {% endif %}
+            <!-- Adding user profile picture as menu icon is logged in end -->
+
+            <div
+              class="dropdown-menu dropdown-menu-right"
+              aria-labelledby="navbar-dropdown-toggle-btn"
+            >
+              <a href="/" class="dropdown-item">Stories Feed</a>
+              <a href="{{ url_for('about') }}" class="dropdown-item">About</a>
+
+              <!-- Changing nav item based on user session (show {logout} if user is {signed in}) -->
+              {% if current_user.is_authenticated %}
+              <a
+                href="{{ url_for('logout') }}"
+                style="color: blue"
+                class="dropdown-item"
+                >Logout</a
+              >
+              <div class="dropdown-divider"></div>
+
+              <div class="dropdown-content">
+                <a
+                  href="{{ url_for('dashboard', username=current_user.username) }}"
+                  class="btn btn-primary btn-block"
+                  role="button"
+                >
+                  <span class="ml-5">Dashboard</span>
+                </a>
+              </div>
+              {% else %}
+              <a
+                href="{{ url_for('register') }}"
+                style="color: blue"
+                class="dropdown-item"
+                >Sign Up</a
+              >
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-content">
+                <a
+                  href="{{ url_for('login') }}"
+                  class="btn btn-primary btn-block"
+                  role="button"
+                >
+                  <span class="ml-5">Sign In</span>
+                </a>
+              </div>
+              {% endif %}
+              <!-- Changing nav item based on user session (show {logout} if user is {signed in}) end -->
+            </div>
+          </div>
+
+          <!-- Dropdown Menu End -->
+        </div>
+      </nav>
+      <!-- Navbar end -->
+
+      <!-- Edit Profile Modal -->
+      {% if current_user.username == username %}
+      <div class="modal" id="modal-1" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <h5 class="modal-title">Edit Profile</h5>
+
+            <!-- Rendering Edit Profile Form  -->
+            <form
+              method="POST"
+              class="form-signin"
+              enctype="multipart/form-data"
+            >
+              {{form.hidden_tag()}}
+
+              <fieldset class="w-400 mw-full">
+                <!-- username input -->
+                <div class="form-group">
+                  {{form.username.label(class="form-control-label")}} {%if
+                  form.username.errors %} {{form.username(class="form-control
+                  is-invalid")}}
+                  <div class="invalid-feedback">
+                    {% for error in form.username.errors %}
+                    <small>{{ error }}</small>
+                    {% endfor %}
+                  </div>
+                  {% else %} {{form.username(class="form-control")}} {% endif %}
+                </div>
+
+                <!-- email input -->
+                <div class="form-group">
+                  {{form.email.label(class="form-control-label")}} {%if
+                  form.email.errors %} {{form.email(class="form-control
+                  is-invalid")}}
+                  <div class="invalid-feedback">
+                    {% for error in form.email.errors %}
+                    <small>{{ error }}</small>
+                    {% endfor %}
+                  </div>
+                  {% else %} {{form.email(class="form-control")}} {% endif %}
+                </div>
+
+                <!-- about input -->
+                <div class="form-group">
+                  {{form.about.label(class="form-control-label")}}
+                  {{form.about(class="form-control")}}
+                </div>
+
+                <!-- profile picture input -->
+
+                <div class="form-group">
+                  {%if form.profile_pic.errors %} {% for error in
+                  form.profile_pic.errors %}
+
+                  <div class="form-group is-invalid">
+                    <div class="custom-file">
+                      {{form.profile_pic()}} {{form.profile_pic.label()}}
+                    </div>
+                    <small class="invalid-feedback">{{ error }}</small>
+                  </div>
+
+                  {% endfor %} {% else %}
+
+                  <div class="custom-file">
+                    {{form.profile_pic.label()}} {{form.profile_pic()}}
+                  </div>
+
+                  {% endif %}
+                </div>
+
+                <!-- profile background input -->
+
+                <div class="form-group">
+                  {%if form.profile_bg.errors %} {% for error in
+                  form.profile_bg.errors %}
+
+                  <div class="form-group is-invalid">
+                    <div class="custom-file">
+                      {{form.profile_bg()}} {{form.profile_bg.label()}}
+                    </div>
+                    <small class="invalid-feedback">{{ error }}</small>
+                  </div>
+
+                  {% endfor %} {% else %}
+
+                  <div class="custom-file">
+                    {{form.profile_bg.label()}} {{form.profile_bg()}}
+                  </div>
+
+                  {% endif %}
+                </div>
+
+                <!-- Submit button -->
+                <div class="text-right mt-20">
+                  <!-- text-right = text-align: right, mt-20 = margin-top: 2rem (20px) -->
+                  <a href="#" class="btn mr-5" role="button">Cancel</a>
+                  {{form.save(class="btn btn-primary")}}
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      <!-- Edit profile modal end -->
+
+      <div class="content-wrapper" style="top: 5rem">
+        <div class="container" style="max-width: 100% !important">
+          <!-- Collecting flashed messages -->
+          {% with messages = get_flashed_messages(with_categories=true) %}
+
+          <!-- checking if there are flashed messages -->
+          {% if messages %}
+          <!-- Looping thorugh the flashed messages -->
+          {% for category,message in messages %}
+
+          <!-- Rendering the gotten message -->
+          <div class="alert alert-{{ category }}" role="alert">
+            <button
+              class="close"
+              data-dismiss="alert"
+              type="button"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="alert-heading text-center">{{ message }}</h4>
+          </div>
+          <!-- Rendering the gotten message end -->
+          {% endfor %}
+          <!-- Looping thorugh the flashed messages end -->
+          {% endif %}
+          <!-- checking if there are flashed messages end -->
+
+          {% endwith %}
+          <!-- Collecting flashed messages end -->
+        </div>
+
+        <!-- Rendering content to be overwritten -->
+
+        <!-- Dashboard Container -->
+        <main role="main">
+          <!-- First comes the modal -->
+
+          <!-- Dashboard Background Image and Info Container -->
+          <div class="card card1">
+            <!-- Dashboard profile background image -->
+            <div class="bg-con" style="height: 250px">
+              <img
+                style="width: 100%; height: 100% !important; object-fit: cover"
+                src="{{ bg_img }}"
+                class="img-fluid"
+                alt="responsive image"
+              />
+            </div>
+
+            <!-- Dashboard profile background image end-->
+
+            <!-- Username, storeis, likes, and profile_pic container -->
+            <div class="card card2" style="width: 100%; height: 80px">
+              <span class="username">{{ username }}</span>
+              <div class="d-flex flex-row justify-content-around">
+                <div class="d-flex flex-column stories">
+                  <span class="stories-count">{{ post_count }}</span>
+                  <span class="stories-title">STORIES</span>
+                </div>
+
+                <div class="d-flex flex-column likes like">
+                  <span class="likes-count">{{ user.likes_count }}</span>
+                  <span class="likes-title">LIKES</span>
+                </div>
+                <div class="d-flex flex-column likes">
+                  <span class="likes-count">NAN</span>
+                  <span class="likes-title">FOLLOWING</span>
+                </div>
+                <div class="d-flex flex-column likes">
+                  <span class="likes-count">NAN</span>
+                  <span class="likes-title">FOLLOWERS</span>
+                </div>
+              </div>
+            </div>
+            <!-- Username, storeis, likes, and profile_pic container end -->
+            <!-- Displaying profile picture -->
+            <div>
+              <img
+                src="{{ profile_pic }}"
+                class="profile-picture"
+                alt="Profile Picture"
+              />
+            </div>
+            <!-- Displaying profile picture end -->
+          </div>
+
+          <!-- Dashboard Background Image and Info Container end -->
+          <div style="height: 85px"></div>
+
+          <div class="d-flex justify-content-between">
+            <!-- About Section -->
+            <div class="col-auto">
+              <div class="ca w-300">
+                <div class="w-auto">
+                  <div class="card">
+                    <h2 class="card-title">About</h2>
+                    <p>{{ about }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- About Section End -->
+
+            <!-- Edit Profile Using Modal -->
+            {% if current_user.username == username %}
+            <div class="edit">
+              <a href="#modal-1" class="btn active btn-sm" role="button">
+                <i class="fa fa-pen" style="color: #1890ff"></i> Edit
+              </a>
+            </div>
+            {%else%}
+            <div class="follow">
+              <a class="btn btn-sm">
+                <i class="fa fa-plus" style="color: #1890ff"></i> Follow</a
+              >
+            </div>
+            {% endif %}
+            <!-- Edit Profile Using Modal end -->
+
+            <!-- Post Section -->
+
+            <div>
+              {% if current_user.username == username and post_count == 0 %}
+
+              <div>
+                <div class="card box-shadow w-300 text-center">
+                  <p>Publish Your First Story Now</p>
+                  <a href="{{ url_for('new_story') }}">
+                    <i class="fa fa-plus" style="font-size: 12rem"></i>
+                  </a>
+                  <p>We Can't Wait To Read Your Stories</p>
+                </div>
+              </div>
+
+              {% elif post_count == 0 %}
+              <div>
+                <div class="card box-shadow w-300 text-center">
+                  <p>
+                    Unfortunately,
+                    <a class="link-nohover">@{{ username }}</a> Has No Stories
+                  </p>
+                  <a class="sad">
+                    <i class="fa fa-sad-tear" style="font-size: 12rem"></i>
+                  </a>
+                </div>
+              </div>
+              {% endif %}
+
+              <!-- Looping over posts -->
+              {% for post in posts %}
+
+              <div class="card box-shadow w-300">
+                <!-- Rendering post image -->
+                <div class="img-con">
+                  <img
+                    width="100%"
+                    height="100%"
+                    style="object-fit: cover"
+                    class="card-img-top"
+                    src="{{ url_for('static', filename='img/story_image/' + post.story_image) }}"
+                    alt="Image
+            load Failed"
+                  />
+                </div>
+                <!-- Rendering post image end -->
+
+                <div class="card-body">
+                  <p class="font-size-16">{{ post.title }}</p>
+                  <div class="d-flex align-items-center">
+                    {% if current_user.username == username %}
+
+                    <a
+                      href="#modal-2"
+                      class="btn btn-default btn-sm"
+                      type="button"
+                      >Delete</a
+                    >
+
+                    <div class="btn-group">
+                      <div class="btn-group">
+                        <a
+                          type="button"
+                          class="btn active btn-sm"
+                          href="{{ url_for('edit_story', id=post.id) }}"
+                        >
+                          Edit
+                        </a>
+                      </div>
+                    </div>
+                    {% else %}
+                    <div></div>
+
+                    <div class="btn-group">
+                      <div class="btn-group">
+                        <a
+                          type="button"
+                          class="btn active btn-sm"
+                          href="{{ url_for('story', id=post.id, title='-'.join(story.query.get(post.id).title.split(' '))) }}"
+                        >
+                          Read
+                        </a>
+                      </div>
+                    </div>
+
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              {% endfor %}
+
+              <!-- Looping over posts end-->
+            </div>
+
+            <!-- Post Section End -->
+          </div>
+        </main>
+        <!-- Dashboard Container end -->
+        <!-- Rending content to be overwritten end -->
+      </div>
+    </div>
+
+    <!-- Halfmoon JS -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/halfmoonui/halfmoon@1.0.3/js/halfmoon.min.js"></script> -->
+
+    <script src="{{ url_for('static', filename='js/halfmoon-1.0.4/js/halfmoon.min.js') }}"></script>
+  </body>
+</html>

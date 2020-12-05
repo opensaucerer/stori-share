@@ -1,0 +1,11 @@
+<!-- Including the preset html file -->
+{% extends "preset.html" %}
+<!-- Including the preset html file end -->
+
+<!-- Block content Overwrite -->
+{% block content %}
+
+<div class="alert-danger">{{ content|safe }}</div>
+
+{% endblock content %}
+<!-- Block content Overwrite end -->

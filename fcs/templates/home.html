@@ -1,0 +1,184 @@
+<!-- Including the preset html file -->
+{% extends "preset.html" %}
+<!-- Including the preset html file end -->
+
+<!-- Block content Overwrite -->
+{% block content %}
+
+<!-- Link to custom JavaScript -->
+<script defer src="{{ url_for('static', filename='js/home.js') }}"></script>
+<!-- Link to custom JavaScript end -->
+
+<!-- Link to custom CSS -->
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/home.css') }}"
+/>
+<!-- Link to custom CSS end -->
+
+<!-- Stores Feed Container -->
+<main role="main">
+  <div class="album">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Looping over posts -->
+        {% for post in posts %}
+
+        <div class="col-md-4">
+          <div class="card box-shadow">
+            <!-- Displaying Post author -->
+            <div
+              class="d-flex justify-content-between align-items-center"
+              style="position: relative; top: -12px; left: -15px"
+            >
+              <a
+                href="{{ url_for('dashboard', username=post.author.username) }}"
+                class="nav-link"
+                style="width: fit-content"
+              >
+                <img
+                  src="{{ url_for('static', filename='img/profile_pic/' + post.author.profile_pic) }}"
+                  class="img-fluid"
+                  alt="Profile Picture"
+                />
+                <small
+                  style="
+                    color: #1890ff;
+                    font-weight: 700;
+                    font-size: 1.3rem;
+                    letter-spacing: 1px;
+                  "
+                  class="pl-5"
+                  >{{post.author.username}}</small
+                >
+              </a>
+              <div id="bcon">
+                <i
+                  id="bookmark"
+                  data-storyid="{{ post.id }}"
+                  class="fa fa-bookmark"
+                ></i>
+              </div>
+            </div>
+            <!-- Displaying Post author end -->
+
+            <!-- Rendering post image -->
+            <div style="height: 170px">
+              <img
+                width="100%"
+                height="100%"
+                style="object-fit: cover"
+                class="card-img-top"
+                src="{{ url_for('static', filename='img/story_image/' + post.story_image) }}"
+                alt="Image
+            load Failed"
+              />
+            </div>
+
+            <!-- Rendering post image end -->
+            <div class="card-body">
+              <p class="font-size-16">{{ post.title }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div id="lcon">
+                  {% if current_user.is_authenticated %} {% if
+                  current_user.has_liked_story(post) %}
+                  <i
+                    id="story-id"
+                    data-storyid="{{ post.id }}"
+                    class="fa fa-heart clicked"
+                  ></i>
+                  {% else %}
+                  <i
+                    id="story-id"
+                    data-storyid="{{ post.id }}"
+                    class="fa fa-heart"
+                  ></i>
+                  {% endif %} {% else %}
+                  <i
+                    id="story-id"
+                    data-storyid="{{ post.id }}"
+                    class="fa fa-heart"
+                  ></i>
+                  {% endif %}
+
+                  <span class="lspan">{{ post.likes.count() }}</span>
+                </div>
+
+                <div class="btn-group">
+                  <div class="btn-group">
+                    <a
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary"
+                      href="{{ url_for('story', id=post.id, title='-'.join(story.query.get(post.id).title.split(' '))) }}"
+                    >
+                      Read
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+        <!-- Looping over posts end-->
+      </div>
+    </div>
+  </div>
+</main>
+<!-- Stores Feed Container end -->
+
+<script>
+  // getting elements from the DOM
+  const likes = document.querySelectorAll("#lcon");
+  // Getting elements from the DOM end
+
+  // lopping through each thumps_up icon
+  likes.forEach((like) => {
+    //getting story-id element
+    const lid = like.querySelector("#story-id");
+    // adding click event to each thumb_up icon
+    lid.addEventListener("click", function () {
+      function loginStatus(status) {
+        if (status == "True") {
+          if (lid.classList == "fa fa-heart clicked") {
+            // calling API to update number of likes
+            async function addLikes() {
+              res = await fetch(`/stories/like/${lid.dataset.storyid}/unlike`);
+              data = await res.json();
+              console.log(data, res.status);
+
+              if (data.status == "success") {
+                like.querySelector(".lspan").innerText = data.count;
+                lid.classList.toggle("clicked");
+              }
+            }
+            addLikes();
+          } else {
+            // calling API to update number of likes
+            async function addLikes() {
+              res = await fetch(`/stories/like/${lid.dataset.storyid}/like`);
+              data = await res.json();
+              console.log(data, res.status);
+
+              if (data.status == "success") {
+                like.querySelector(".lspan").innerText = data.count;
+                lid.classList.toggle("clicked");
+              }
+            }
+            addLikes();
+          }
+        }
+      }
+      loginStatus("{{ current_user.is_authenticated }}");
+    });
+    // toggling between liked or unliked
+
+    // toggling between liked or unliked end
+  });
+  // adding click event to each thumb_up icon end
+  // lopping through each thumps_up icon end
+</script>
+
+{% endblock content %}
+<!-- Block content Overwrite end -->

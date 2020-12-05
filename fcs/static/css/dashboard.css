@@ -1,0 +1,286 @@
+main {
+    margin-left: 10%;
+    margin-right: 10%;
+    position: relative;
+    top: -30px;
+}
+
+@media (max-width: 460px) {
+    .card2 {
+        top: -20px !important;
+    }
+
+}
+
+.flex-column {
+    padding-left: 20px !important;
+}
+
+
+@media (max-width: 504px) {
+    main {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    img {
+        height: 230px !important;
+    }
+
+    .card1 {
+        height: 230px !important;
+    }
+
+    .flex-row {
+        width: 160px !important;
+        left: 28%;
+        top: 4px !important;
+    }
+
+    .stories-count,
+    .likes-count {
+        font-size: 12px !important;
+    }
+
+    .stories,
+    .likes {
+        font-size: 12px !important;
+    }
+
+    .flex-column {
+        padding-left: 10px !important;
+    }
+
+    .username {
+        left: 28% !important;
+        font-size: 19px !important;
+        top: -30px !important;
+    }
+
+    .profile-picture {
+        width: 70px !important;
+        height: 70px !important;
+        bottom: -44px !important;
+        left: 13px !important;
+    }
+
+    .justify-content-between {
+
+        flex-direction: column !important;
+    }
+
+    .w-300 {
+        width: auto !important;
+    }
+
+    .ca.w-300 {
+        width: auto !important;
+        position: relative !important;
+    }
+
+    .font-size-16 {
+        height: 70px !important;
+    }
+
+    .edit {
+        position: absolute !important;
+        right: 18px !important;
+        top: 275px !important;
+    }
+
+
+
+}
+
+.ca.w-300 {
+    position: sticky;
+    top: 10px;
+}
+
+.align-items-center {
+
+    justify-content: space-between !important;
+}
+
+
+@media (max-width: 650px) and (min-width: 505px) {
+    .w-300 {
+        width: 24rem !important;
+    }
+
+}
+
+@media (min-width: 1100px) {
+    .w-300 {
+        width: 35rem !important;
+    }
+
+}
+
+@media (max-width: 760px) and (min-width: 651px) {
+    .w-300 {
+        width: 28rem !important;
+    }
+}
+
+
+@media (max-width: 610px) {
+    .like {
+        display: none !important;
+    }
+
+    .stories {
+        display: none !important;
+    }
+}
+
+
+@media (max-width: 949px) and (min-width: 460px) {
+    .username {
+        left: 170px !important;
+        font-size: 25px !important;
+        top: -38px !important;
+    }
+
+    .card2 {
+        top: -20px !important;
+    }
+
+    main {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    img {
+        height: 230px !important;
+    }
+
+    .card1 {
+        height: 230px !important;
+    }
+
+    .flex-row {
+        width: 230px !important;
+        left: 28%;
+        top: 4px !important;
+        left: 22%;
+        top: -15px !important;
+
+    }
+
+    .stories-count,
+    .likes-count {
+        font-size: 15px !important;
+    }
+
+    .stories,
+    .likes {
+        font-size: 12px !important;
+    }
+
+
+    .profile-picture {
+
+        width: 100px !important;
+        height: 100px !important;
+        bottom: -55px !important;
+        left: 30px !important;
+    }
+
+    .font-size-16 {
+        height: 50px !important;
+    }
+
+}
+
+
+.edit {
+    position: absolute;
+    right: 25px;
+    top: 275px;
+}
+
+.follow {
+    position: absolute;
+    right: 15px;
+    top: 275px;
+}
+
+.profile-picture {
+    border-radius: 50% !important;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    bottom: -40px;
+    left: 50px;
+    border: 2px solid white;
+
+}
+
+
+.username {
+    position: relative;
+    left: 24%;
+    background: transparent;
+    top: -40px;
+    display: inline;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 25px;
+    font-weight: 900;
+    color: white !important;
+    /* -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1.2px;
+    -webkit-text-stroke-color: black;
+    -webkit-text-stroke-weight: 500; */
+}
+
+
+
+.flex-row {
+
+    width: 300px;
+    position: relative;
+    left: 22%;
+    top: -20px;
+
+}
+
+.stories-count,
+.likes-count {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+.card1 {
+    height: 250px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top-style: none;
+    padding: 0;
+    margin: 0;
+    border: 0 !important;
+    box-sizing: border-box !important;
+    z-index: -2;
+}
+
+.card2 {
+    position: relative;
+    top: -0px !important;
+    background: rgba(255, 255, 255, 0.329);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+    border-top-style: none;
+
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box !important;
+}
+
+.img-con img {
+    height: 230px !important;
+}
