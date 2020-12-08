@@ -51,6 +51,7 @@
 }
 
 
-.font-size-16 {
+.post-title{
     height: 80px;
+    word-wrap: break-word;
 }

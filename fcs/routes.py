@@ -1,13 +1,14 @@
 # importing requiered modules
 import os
 import secrets
+from datetime import datetime
 from flask import Flask, render_template, url_for, redirect, flash, jsonify, request
 from werkzeug.utils import secure_filename
 from fcs import app, db, bcrypt
 from fcs.forms import RegistrationForm, LoginForm, StoryForm, ProfileForm
 from fcs.models import User, Story
 from fcs.articles import Articles
-from fcs.exceptions import InvalidUsage
+from fcs.exceptions import RequestError
 from fcs.others import generate_url
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_cors import CORS, cross_origin
@@ -17,16 +18,21 @@ from flask_cors import CORS, cross_origin
 
 # defining config variables
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+current_year = datetime.now().year
 # defining config variables end
 
 
 # stories feed / home route
 @app.route('/')
 def home():
+
+    # defining variables
+    form = LoginForm()
     story = Story
     posts = Story.query.all()
+    # defining variables end
 
-    return render_template('home.html', posts=posts, story=story)
+    return render_template('home.html', posts=posts, story=story, form=form, current_year=current_year)
 
 
 # about route
@@ -40,7 +46,7 @@ def about():
 
 
 # registration route
-@app.route('/register', methods=["POST", "GET"])
+@app.route('/signup', methods=["POST", "GET"])
 def register():
     # defining variables
     form = RegistrationForm()
@@ -85,17 +91,34 @@ def register():
 
        # Validating form on submit end
 
-    return render_template('register.html', form=form, title=blog_title)
+    return render_template('register.html', form=form, title=blog_title, current_year=current_year)
 
 
 # login route
-@app.route('/login', methods=["POST", "GET"])
+@app.route('/signin', methods=["POST", "GET"])
 def login():
+
+    user_data = request.get_json()
 
     # defining variables
     form = LoginForm()
     blog_title = "Sign In | Start Telling Your Stories"
     # defining variables end
+
+    if user_data:
+        email = user_data['email']
+        password = user_data['password']
+        remember_me = user_data['remember_me']
+        existing_user = User.query.filter_by(email=email.lower()).first()
+
+        if existing_user and bcrypt.check_password_hash(existing_user.password, password):
+            # logging user in using flask login (login_user) for session management
+            login_user(existing_user, remember=remember_me)
+            return jsonify({"message": "Login Successful"}), 200
+        elif existing_user:
+            raise RequestError('Invalid Password')
+        else:
+            raise RequestError('Invalid Credentials')
 
     # redirecting using for accessing page if already logged in
     if current_user.is_authenticated:
@@ -128,11 +151,11 @@ def login():
             # sending flased message end
 
     # Validating form on submit end
-    return render_template('login.html', form=form, title=blog_title)
+    return render_template('login.html', form=form, title=blog_title, current_year=current_year)
 
 
 # logout route
-@app.route('/logout')
+@app.route('/signout')
 @login_required
 def logout():
     # logging out user
@@ -266,7 +289,7 @@ def create_story():
     # conmputing and returning message
     message = {"status": "success", "link": "/" +
                current_user.username + "?status=new-post"}
-    return jsonify(message)
+    return jsonify(message), 201
     # computing and returning message end
 
 
@@ -301,14 +324,14 @@ def story_upload():
             if story_image:
                 # conmputing and returning message
                 message = {"status": "success", "path": story_image}
-                return jsonify(message)
+                return jsonify(message), 200
                 # computing and returning message end
             else:
                 message = {"status": "failed"}
-                return jsonify(message)
+                return jsonify(message), 400
         else:
             message = {"status": "failed to unpack image"}
-            return jsonify(message)
+            return jsonify(message), 400
 
 
 # Like Story route
@@ -357,6 +380,7 @@ def story(id, title):
 
 # read story route
 @app.route('/edit_story/<id>/edit', methods=["POST", "GET"])
+@login_required
 def edit_story(id):
     # defining variables
 
@@ -374,10 +398,23 @@ def edit_story(id):
 
 # read story route
 @app.route('/delete_story/<id>', methods=["POST"])
+@login_required
 def delete_story(id):
     # getting story from db
     story = Story.query.get(id)
     # deleting story from db
     db.session.delete(story)
+    db.session.commit()
 
     return redirect(url_for('dashboard'))
+
+
+# read story route
+@app.route('/collections', methods=["GET", "POST"])
+@login_required
+def collections():
+    # defining variables
+    blog_title = "Collections | Your Favorite Stories"
+    # getting story from db
+
+    return render_template('collections.html', title=blog_title)

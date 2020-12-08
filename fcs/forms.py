@@ -8,6 +8,9 @@ from fcs.models import User
 from flask_login import current_user
 # importing the required modules end
 
+# forbiden usernames to allow for routes consistency
+FORBIDEN_NAMES = ['signin', 'signup', 'signout', 'about']
+
 
 # defining the registration form class
 class RegistrationForm(FlaskForm):
@@ -27,7 +30,7 @@ class RegistrationForm(FlaskForm):
     # setting up custom validation to check if username exists
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data.lower()).first()
-        if user:
+        if user or username.data.lower() in FORBIDEN_NAMES:
             raise ValidationError('That Username Has Been Taken')
 
     # setting up custom validation to check if email exists

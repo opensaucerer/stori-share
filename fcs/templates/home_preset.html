@@ -75,6 +75,71 @@
     data-sidebar-shortcut-enabled="true"
     data-dm-shortcut-enabled="true"
   >
+    <!-- Login Modal -->
+    <!-- First comes the modal -->
+
+    {% if not current_user.is_authenticated %}
+    <div class="modal" id="modal-2" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <a href="#" class="btn close" role="button" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </a>
+          <h5 class="modal-title">You Must Be Signed In</h5>
+          <form action="" method="" class="form-signin">
+            {{form.hidden_tag()}}
+
+            <fieldset class="form-group">
+              <div class="form-group">
+                {{form.email.label(class="form-control-label")}}
+                {{form.email(class="form-control")}}
+
+                <small class="invalid-feedback" id="em">{{ error }}</small>
+              </div>
+              <div class="form-group">
+                {{form.password.label(class="form-control-label")}}
+                {{form.password(class="form-control")}}
+                <small class="invalid-feedback" id="pass">{{ error }}</small>
+              </div>
+              <div class="custom-checkbox mb-20">
+                {{form.remember_me(class="form-check-input")}}
+                {{form.remember_me.label(class="form-check-label")}}
+              </div>
+
+              <div class="form-group submit">
+                <button
+                  id="submit"
+                  class="btn btn-lg btn-primary btn-block"
+                  type="button"
+                >
+                  <i class="fa"></i> Sign In
+                </button>
+              </div>
+              <p class="text-muted text-center">
+                <a href="{{ url_for('register') }}">Forgot Password?</a>
+              </p>
+
+              <!-- Redirecting to Sign Up page for new users -->
+              <div class="form-group">
+                <p class="text-muted text-center">
+                  Don't Have an Account?
+                  <a href="{{ url_for('register') }}">Sign Up Here</a>
+                </p>
+              </div>
+              <!-- Redirecting to Sign In page for exsiting users end-->
+
+              <!-- Copyrights Section -->
+              <p class="text-center">&copy; {{current_year}}</p>
+              <!-- Copyrights Section end -->
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Login Modal End -->
+
     <!-- Page wrapper start -->
     <div id="page-wrapper" class="page-wrapper with-navbar">
       <!-- Navbar start -->
@@ -102,7 +167,6 @@
           <li class="nav-item">
             <a href="{{ url_for('about') }}" class="nav-link">About</a>
           </li>
-
           <li class="nav-item active">
             <a href="{{ url_for('register') }}" class="nav-link">Sign Up</a>
           </li>
@@ -239,7 +303,6 @@
               </div>
               {% else %}
               <a href="{{ url_for('about') }}" class="dropdown-item">About</a>
-
               <a
                 href="{{ url_for('register') }}"
                 style="color: blue"

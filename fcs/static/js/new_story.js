@@ -80,8 +80,9 @@ function editor() {
     skin: skin,
     content_css: theme,
     inline: true,
-    plugins: " autosave lists",
-    autosave_interval: "10s",
+    plugins: " autosave lists paste",
+    paste_as_text: true,
+    autosave_interval: "60s",
     autosave_restore_when_empty: true,
     autosave_ask_before_unload: false,
     toolbar:

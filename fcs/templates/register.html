@@ -14,7 +14,7 @@
 <div class="container">
   <div class="content-section">
     <!-- Rendering Sign Up Form  -->
-    <form action="" method="post" class="form-signin">
+    <form action="" method="POST" class="form-signin">
       {{form.hidden_tag()}}
 
       <fieldset class="form-group">
@@ -78,7 +78,7 @@
         <!-- Redirecting to Sign In page for exsiting users end-->
 
         <!-- Copyrights Section -->
-        <p class="text-center">&copy; 2020</p>
+        <p class="text-center">&copy; {{current_year}}</p>
         <!-- Copyrights Section end -->
       </fieldset>
     </form>

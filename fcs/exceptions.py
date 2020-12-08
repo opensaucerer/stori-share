@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from fcs import app
 
 
-class InvalidUsage(Exception):
+class RequestError(Exception):
     status_code = 400
 
     def __init__(self, message, status_code=None, payload=None):
@@ -18,7 +18,7 @@ class InvalidUsage(Exception):
         return rv
 
 
-@app.errorhandler(InvalidUsage)
+@app.errorhandler(RequestError)
 def handle_invalid_usage(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code

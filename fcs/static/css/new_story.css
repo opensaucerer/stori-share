@@ -43,6 +43,7 @@ small {
     margin-bottom: 20px !important;
     height: 400px !important;
     z-index: 0 !important;
+    word-wrap: break-word !important;
 }
 
 
