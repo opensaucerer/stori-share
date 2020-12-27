@@ -70,7 +70,7 @@ def register():
             form.password.data).decode('utf-8')
         # generating hashed password end
 
-        # add new user to User mode
+        # add new user to User model
         new_user = User(username=form.username.data.lower(),
                         email=form.email.data.lower(), password=hashed_password, profile_bg=bg_url)
         # add new user to User model end
@@ -170,7 +170,7 @@ def pic_save(image):
     _, f_ext = os.path.splitext(image.filename)
     image_name = random_name + f_ext
     image_path = os.path.join(
-        app.root_path, 'static\img\profile_pic', image_name)
+        app.root_path, 'static/img/profile_pic', image_name)
     image.save(image_path)
     return image_name
 
@@ -180,7 +180,7 @@ def bg_save(image):
     _, f_ext = os.path.splitext(image.filename)
     image_name = random_name + f_ext
     image_path = os.path.join(
-        app.root_path, 'static\img\profile_bg', image_name)
+        app.root_path, 'static/img/profile_bg', image_name)
     image.save(image_path)
     return image_name
 
@@ -245,8 +245,11 @@ def dashboard(username):
             # populating form with user's default data end
 
         # checking if URL Parameter exisits before rendring
-        if status:
+        if status == 'new-post':
             flash('Your Story is Live', 'success')
+            return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, story=story, post_count=post_count, user=user)
+        elif status == 'updated-post':
+            flash('Your Story Has Been Updated', 'success')
             return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, story=story, post_count=post_count, user=user)
         else:
             return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, story=story, post_count=post_count, user=user)
@@ -276,7 +279,7 @@ def create_story():
     # getting story from json
     data = request.get_json()
 
-    # add new Story to User mode
+    # add new Story to User model
     new_story = Story(title=data['story_title'], content=data['story_content'],
                       story_image=data['story_image'], author=current_user)
     # add new Story to User model end
@@ -303,7 +306,7 @@ def save_image(image):
     _, f_ext = os.path.splitext(image.filename)
     image_name = random_name + f_ext
     image_path = os.path.join(
-        app.root_path, 'static\img\story_image', image_name)
+        app.root_path, 'static/img/story_image', image_name)
     image.save(image_path)
     return image_name
 
@@ -382,18 +385,44 @@ def story(id, title):
 @app.route('/edit_story/<id>/edit', methods=["POST", "GET"])
 @login_required
 def edit_story(id):
-    # defining variables
 
-    blog_title = "Edit Story | Your Story In a New Way"
-    form = StoryForm()
+    if request.method == 'POST':
+        # getting story from json
+        data = request.get_json()
+        story_id = data['story_id']
+        title = data['story_title']
+        content = data['story_content']
 
-    id = int(id)
-    content = Story.query.get(id).content
-    story_title = Story.query.get(id).title
+        existing_story = Story.query.get(story_id)
+        if existing_story:
+            # Updating existing story
+            existing_story.title = title
+            existing_story.content = content
+            if data['story_image']:
+                existing_story.story_image = data['story_image']
+            #  Updating existing story end
+            # committing to database
+            db.session.commit()
+            # committing to database end
+            # conmputing and returning message
+            message = {"status": "success", "link": "/" +
+                       current_user.username + "?status=updated-post"}
+            return jsonify(message), 201
+            # computing and returning message end
+
     if request.method == 'GET':
-        form.title.data = story_title
+        # defining variables
+        blog_title = "Edit Story | Your Story In a New Way"
+        form = StoryForm()
+        id = int(id)
+        if Story.query.get(id):
+            content = Story.query.get(id).content
+            story_title = Story.query.get(id).title
+            form.title.data = story_title
+        else:
+            return redirect(url_for('home'))
 
-    return render_template('edit_story.html', title=blog_title, form=form, content=content, story_title=story_title)
+        return render_template('edit_story.html', title=blog_title, form=form, content=content, story_title=story_title)
 
 
 # read story route

@@ -1,11 +1,9 @@
-const displaySwitch = document.getElementById("switch-2");
-const body = document.querySelector("body");
-// const submit = document.querySelector("#submit");
+//getting elements from the DOM
 const form = document.querySelector("form");
 const error1 = document.querySelector("#small1");
 const error2 = document.querySelector("#small2");
 const title = document.querySelector("#title");
-const storied = document.querySelector(".editor");
+// const storied = document.querySelector(".note-editable");
 const fb = document.querySelector("#fb");
 const fg = document.querySelector("#fg");
 const finput = document.querySelector("#file-input-6");
@@ -14,10 +12,26 @@ const msg = document.querySelector(".alert-heading");
 const btn = document.querySelector("#submit");
 const spin = document.querySelector("button i.fa");
 
-console.log(spin);
-
-var skin;
-var theme;
+//instantiating the summernoteJS html editor
+$(document).ready(function () {
+  $("#editor").summernote({
+    placeholder: "Remember, Any Story Can Be Told",
+    tabsize: 1,
+    height: 200,
+    toolbar: [
+      // [groupName, [list of button]]
+      ["style", ["bold", "italic", "underline", "clear"]],
+      ["font", ["strikethrough", "superscript", "subscript"]],
+      ["fontsize", ["fontsize"]],
+      ["color", ["color"]],
+      ["para", ["ul", "ol", "paragraph"]],
+      ["table", ["table"]],
+      ["height", ["height"]],
+      ["insert", ["link"]],
+    ],
+    dialogsFade: true,
+  });
+});
 
 title.addEventListener("input", function (event) {
   if (title.value.length == 0) {
@@ -29,73 +43,18 @@ title.addEventListener("input", function (event) {
   }
 });
 
-storied.addEventListener("input", function (event) {
-  var currentContent = tinymce.activeEditor.getContent();
-  if (currentContent.trim().length == 0 || currentContent.trim().length < 100) {
-    error2.innerText = "Your Story Is Too Short";
-  } else if (currentContent.trim().length >= 100) {
-    error2.innerText = "";
-  }
-});
-
-function setDisplay() {
-  mode = localStorage.getItem("display-mode");
-  if (mode) {
-    if (mode == "dark") {
-      displaySwitch.checked = "checked";
-      body.className =
-        "dark-mode with-custom-webkit-scrollbars with-custom-css-scrollbars";
-      skin = "oxide-dark";
-      theme = "dark";
-    } else {
-      displaySwitch.checked = "";
-      body.className =
-        "with-custom-webkit-scrollbars with-custom-css-scrollbars";
-      skin = "oxide";
-      theme = "default";
-    }
-  } else {
-    localStorage.setItem("display-mode", "light");
-    displaySwitch.checked = "";
-    body.className = "with-custom-webkit-scrollbars with-custom-css-scrollbars";
-  }
-}
-setDisplay();
-
-displaySwitch.addEventListener("click", () => {
-  if (displaySwitch.checked) {
-    localStorage.setItem("display-mode", "dark");
-    setDisplay();
-    editor();
-  } else {
-    localStorage.setItem("display-mode", "light");
-    setDisplay();
-    editor();
-  }
-});
-
-function editor() {
-  tinymce.init({
-    selector: ".editor",
-    skin: skin,
-    content_css: theme,
-    inline: true,
-    plugins: " autosave lists paste",
-    paste_as_text: true,
-    autosave_interval: "60s",
-    autosave_restore_when_empty: true,
-    autosave_ask_before_unload: false,
-    toolbar:
-      "undo redo | styleselect | bold italic forecolor backcolor |" +
-      "alignleft aligncenter alignright alignjustify |" +
-      "bullist numlist outdent indent",
-  });
-}
-
-editor();
+// storied.addEventListener("input", function (event) {
+//   var currentContent = $("#editor").summernote("code");
+//   alert("shit");
+//   if (currentContent.trim().length == 0 || currentContent.trim().length < 100) {
+//     error2.innerText = "Your Story Is Too Short";
+//   } else if (currentContent.trim().length >= 100) {
+//     error2.innerText = "";
+//   }
+// });
 
 btn.onclick = async function (event) {
-  var myContent = tinymce.activeEditor.getContent();
+  var myContent = $("#editor").summernote("code");
   if (title.value.length == 0) {
     error1.innerText = "Title Can't be Empty";
     event.preventDefault();
@@ -108,6 +67,7 @@ btn.onclick = async function (event) {
   } else if (!finput.value) {
     fg.classList.add("is-invalid");
     fb.innerText = "Story Image Required";
+    error2.innerText = "";
     event.preventDefault();
   } else {
     event.preventDefault();
@@ -126,7 +86,7 @@ btn.onclick = async function (event) {
 
     if (response.ok) {
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       if (data.status == "success") {
         var contentHTML = {
           story_content: myContent,
@@ -142,7 +102,7 @@ btn.onclick = async function (event) {
         });
         if (storyRes.ok) {
           const storyData = await storyRes.json();
-          console.log(storyData);
+          // console.log(storyData);
           if (storyData.status == "success") {
             window.location.href = storyData.link;
           } else {
@@ -153,7 +113,7 @@ btn.onclick = async function (event) {
             btn.innerText = `Publish`;
           }
         } else {
-          console.log("failed to send");
+          // console.log("failed to send");
           fmsg.className = "alert alert-danger";
           fmsg.style.display = "";
           msg.innerText = "Your Story Wasn't Published. Please Try Again";
@@ -168,7 +128,7 @@ btn.onclick = async function (event) {
         btn.innerText = `Publish`;
       }
     } else {
-      console.log("failed to send");
+      // console.log("failed to send");
       fmsg.className = "alert alert-danger";
       fmsg.style.display = "";
       msg.innerText = "Image Upload Failed. Please Check File And Try Again";

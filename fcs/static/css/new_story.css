@@ -36,14 +36,16 @@ small {
 .form-signin {
     padding: 15px;
     margin: auto;
+    
 
 }
 
-.editor {
-    margin-bottom: 20px !important;
-    height: 400px !important;
-    z-index: 0 !important;
-    word-wrap: break-word !important;
+.note-editable {
+    /* margin-bottom: 20px !important; */
+    /* height: 400px !important; */
+    /* z-index: 0 !important; */
+    word-break: break-all !important;
+    word-wrap: none !important;
 }
 
 

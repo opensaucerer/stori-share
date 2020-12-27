@@ -9,7 +9,7 @@ from flask_login import current_user
 # importing the required modules end
 
 # forbiden usernames to allow for routes consistency
-FORBIDEN_NAMES = ['signin', 'signup', 'signout', 'about']
+FORBIDEN_NAMES = ['signin', 'signup', 'signout', 'about', 'collections']
 
 
 # defining the registration form class
