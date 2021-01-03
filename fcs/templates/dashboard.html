@@ -163,12 +163,12 @@
           <a
             href="{{ url_for('dashboard', username=current_user.username) }}"
             class="hidden-sm-and-down"
-            role="button"
           >
             <img
               src="{{ url_for('static', filename='img/profile_pic/' + current_user.profile_pic) }}"
               class="nav-icon"
               alt="Profile Picture"
+              style="border: 1px solid grey; border-radius: 50%"
             />
           </a>
           {% else %}
@@ -199,6 +199,7 @@
                 src="{{ url_for('static', filename='img/profile_pic/' + current_user.profile_pic) }}"
                 class="nav-icon"
                 alt="Profile Picture"
+                style="border: 1px solid grey; border-radius: 50%"
               />
             </div>
             {% else %}
@@ -457,6 +458,7 @@
             <!-- Displaying profile picture -->
             <div>
               <img
+                style="background: rgb(73, 71, 71)"
                 src="{{ profile_pic }}"
                 class="profile-picture"
                 alt="Profile Picture"
@@ -546,7 +548,12 @@
                 <!-- Rendering post image end -->
 
                 <div class="card-body">
-                  <p class="font-size-16">{{ post.title }}</p>
+                  <a
+                    class="link-nohover"
+                    href="{{ url_for('story', id=post.id, title='-'.join(story.query.get(post.id).title.split(' '))) }}"
+                  >
+                    <p class="font-size-16">{{ post.title }}</p></a
+                  >
                   <div class="d-flex align-items-center">
                     {% if current_user.username == username %}
 

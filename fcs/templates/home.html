@@ -40,6 +40,7 @@
                   src="{{ url_for('static', filename='img/profile_pic/' + post.author.profile_pic) }}"
                   class="img-fluid"
                   alt="Profile Picture"
+                  style="border: 1px solid grey; border-radius: 50%"
                 />
                 <small
                   style="
@@ -53,11 +54,27 @@
                 >
               </a>
               <div id="bcon">
+                {% if current_user.is_authenticated %} {% if
+                current_user.has_bookmarked_story(post) %}
+                <i
+                  id="collections-id"
+                  data-storyid="{{ post.id }}"
+                  class="fa fa-bookmark clicked"
+                ></i>
+
+                {% else %}
                 <i
                   id="collections-id"
                   data-storyid="{{ post.id }}"
                   class="fa fa-bookmark"
                 ></i>
+                {% endif %} {% else %}
+                <i
+                  id="collections-id"
+                  data-storyid="{{ post.id }}"
+                  class="fa fa-bookmark"
+                ></i>
+                {% endif %}
               </div>
             </div>
             <!-- Displaying Post author end -->
@@ -130,22 +147,42 @@
 
 <script>
   // getting elements from the DOM
-  const likes = document.querySelectorAll("#lcon");
-  const collections = document.querySelectorAll("#bcon");
+  const likes = document.querySelectorAll('#lcon');
+  const collections = document.querySelectorAll('#bcon');
   // Getting elements from the DOM end
 
   // lopping through each collections icon
   collections.forEach((collection) => {
-    const cid = collection.querySelector("#collections-id");
-    cid.addEventListener("click", function () {
-      if ("{{ current_user.is_authenticated }}" == "True") {
-        if (cid.classList == "fa fa-heart clicked") {
-          cid.classList.toggle("clicked");
+    const cid = collection.querySelector('#collections-id');
+    cid.addEventListener('click', function () {
+      if ('{{ current_user.is_authenticated }}' == 'True') {
+        if (cid.classList == 'fa fa-bookmark clicked') {
+          // calling API to update collections
+          async function modCollections() {
+            res = await fetch(`/collections/${cid.dataset.storyid}/remove`);
+            data = await res.json();
+            console.log(data, res.message);
+
+            if (data.message == 'success') {
+              cid.classList.toggle('clicked');
+            }
+          }
+          modCollections();
         } else {
-          cid.classList.toggle("clicked");
+          // calling API to update collections
+          async function modCollections() {
+            res = await fetch(`/collections/${cid.dataset.storyid}/add`);
+            data = await res.json();
+            console.log(data, res.message);
+
+            if (data.message == 'success') {
+              cid.classList.toggle('clicked');
+            }
+          }
+          modCollections();
         }
       } else {
-        window.location.href = "#modal-2";
+        window.location.href = '#modal-2';
       }
     });
   });
@@ -154,21 +191,21 @@
   // lopping through each thumps_up icon
   likes.forEach((like) => {
     //getting story-id element
-    const lid = like.querySelector("#story-id");
+    const lid = like.querySelector('#story-id');
     // adding click event to each thumb_up icon
-    lid.addEventListener("click", function () {
+    lid.addEventListener('click', function () {
       function loginStatus(status) {
-        if (status == "True") {
-          if (lid.classList == "fa fa-heart clicked") {
+        if (status == 'True') {
+          if (lid.classList == 'fa fa-heart clicked') {
             // calling API to update number of likes
             async function addLikes() {
               res = await fetch(`/stories/like/${lid.dataset.storyid}/unlike`);
               data = await res.json();
               console.log(data, res.status);
 
-              if (data.status == "success") {
-                like.querySelector(".lspan").innerText = data.count;
-                lid.classList.toggle("clicked");
+              if (data.status == 'success') {
+                like.querySelector('.lspan').innerText = data.count;
+                lid.classList.toggle('clicked');
               }
             }
             addLikes();
@@ -179,62 +216,59 @@
               data = await res.json();
               console.log(data, res.status);
 
-              if (data.status == "success") {
-                like.querySelector(".lspan").innerText = data.count;
-                lid.classList.toggle("clicked");
+              if (data.status == 'success') {
+                like.querySelector('.lspan').innerText = data.count;
+                lid.classList.toggle('clicked');
               }
             }
             addLikes();
           }
         } else {
-          window.location.href = "#modal-2";
+          window.location.href = '#modal-2';
         }
       }
-      loginStatus("{{ current_user.is_authenticated }}");
+      loginStatus('{{ current_user.is_authenticated }}');
     });
-    // toggling between liked or unliked
-
-    // toggling between liked or unliked end
   });
   // adding click event to each thumb_up icon end
   // lopping through each thumps_up icon end
 
   //controlling login through modal
-  const submit = document.getElementById("submit");
-  const email = document.getElementById("email");
-  const password = document.getElementById("password");
-  const remember_me = document.getElementById("remember_me");
-  const em = document.querySelector("#em");
-  const pass = document.querySelector("#pass");
-  submit.addEventListener("click", loginUser);
+  const submit = document.getElementById('submit');
+  const email = document.getElementById('email');
+  const password = document.getElementById('password');
+  const remember_me = document.getElementById('remember_me');
+  const em = document.querySelector('#em');
+  const pass = document.querySelector('#pass');
+  submit.addEventListener('click', loginUser);
 
   async function loginUser() {
     event.preventDefault();
     submit.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Signing In';
 
     if (email.value && password.value) {
-      em.innerText = "";
-      pass.innerText = "";
+      em.innerText = '';
+      pass.innerText = '';
       InitiateLogin();
     } else if (!email.value && !password.value) {
       em.innerText = "Email Can't Be Empty";
       pass.innerText = "Password Can't Be Empty";
-      submit.innerText = `Publish`;
+      submit.innerText = `Sign In`;
     } else if (!email.value) {
       em.innerText = "Email Can't Be Empty";
-      pass.innerText = "";
+      pass.innerText = '';
       submit.innerText = `Sign In`;
     } else if (!password.value) {
-      em.innerText = "";
+      em.innerText = '';
       pass.innerText = "Password Can't Be Empty";
       submit.innerText = `Sign In`;
     }
 
     async function InitiateLogin() {
-      res = await fetch("\signin", {
-        method: "POST",
+      res = await fetch('\signin', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           email: email.value,
@@ -244,16 +278,16 @@
       });
 
       response = await res.json();
-      if (response.message == "Login Successful") {
-        [goto, _] = window.location.href.split("#modal-2");
+      if (response.message == 'Login Successful') {
+        [goto, _] = window.location.href.split('#modal-2');
         window.location.href = goto;
-      } else if (response.message == "Invalid Password") {
-        em.innerText = "";
-        pass.innerText = "Check Details and Try Again";
+      } else if (response.message == 'Invalid Password') {
+        em.innerText = '';
+        pass.innerText = 'Check Details and Try Again';
         submit.innerText = `Sign In`;
       } else {
-        em.innerText = "Check Details and Try Again";
-        pass.innerText = "Check Details and Try Again";
+        em.innerText = 'Check Details and Try Again';
+        pass.innerText = 'Check Details and Try Again';
         submit.innerText = `Sign In`;
       }
     }

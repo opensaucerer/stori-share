@@ -3,4 +3,104 @@
 <!-- Including the preset html file end -->
 
 <!-- Block content Overwrite -->
-{% block content %} {% endblock content %}
+{% block content %}
+
+<!-- Link to custom CSS -->
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/collections.css') }}"
+/>
+
+<!-- Link to custom CSS end -->
+{% if collection_count == 0 %}
+
+<section class="text-center">
+  <div class="container">
+    <h1>WAIT!! WHAT?</h1>
+    <p class="text-muted">You haven't saved any stories yet?</p>
+    <p class="text-muted">
+      Explore tons of interesting stories now and starting adding those you love
+      to your collections.
+    </p>
+    <div class="btn-group">
+      <div class="btn-group">
+        <a
+          type="button"
+          class="btn btn-primary active btn-md"
+          href="{{ url_for('home') }}"
+        >
+          Explore Amazing Stories
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% else %}
+
+<!-- Stores Feed Container -->
+<main role="main">
+  <div class="album">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- Looping over collections -->
+        {% for collection in collections %}
+
+        <div class="col-md-4">
+          <div class="card box-shadow">
+            <!-- Rendering collection image -->
+            <div style="height: 170px">
+              <img
+                width="100%"
+                height="100%"
+                style="object-fit: cover"
+                class="card-img-top"
+                src="{{ url_for('static', filename='img/story_image/' + story.query.get(collection.collection_id).story_image) }}"
+                alt="Image load Failed"
+              />
+            </div>
+
+            <!-- Rendering collection image end -->
+            <div class="card-body">
+              <p class="font-size-16 collection-title">
+                {{ story.query.get(collection.collection_id).title }}
+              </p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div id="bcon">
+                  <i
+                    id="collections-id"
+                    data-storyid="{{ collection.collection_id }}"
+                    class="fa fa-trash-alt"
+                  ></i>
+                  <span class="bspan">Remove</span>
+                </div>
+
+                <div class="btn-group">
+                  <div class="btn-group">
+                    <a
+                      type="button"
+                      class="btn btn-sm btn-outline-secondary"
+                      href="{{ url_for('story', id=collection.collection_id, title='-'.join(story.query.get(collection.collection_id).title.split(' '))) }}"
+                    >
+                      Read
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %}
+        <!-- Looping over collections end-->
+      </div>
+    </div>
+  </div>
+</main>
+<!-- Stores Feed Container end -->
+{% endif %}
+
+<!-- importing custom JavaScript -->
+<script src="{{ url_for('static', filename='js/collections.js') }}"></script>
+<!-- importing custom JavaScript end -->
+{% endblock content %}

@@ -227,6 +227,7 @@
               src="{{ url_for('static', filename='img/profile_pic/' + current_user.profile_pic) }}"
               class="nav-icon"
               alt="Profile Picture"
+              style="border: 1px solid grey; border-radius: 50%"
             />
           </a>
           {% else %}
@@ -256,6 +257,7 @@
                 src="{{ url_for('static', filename='img/profile_pic/' + current_user.profile_pic) }}"
                 class="nav-icon"
                 alt="Profile Picture"
+                style="border: 1px solid grey; border-radius: 50%"
               />
             </div>
             {% else %}

@@ -42,7 +42,11 @@
 
         <div class="form-group">
           {{form.content.label(class="form-control-label")}}
-          <textarea id="editor" class="editor form-control">
+          <textarea
+            id="editor"
+            class="editor form-control"
+            style="color: red !important"
+          >
 {{content}}</textarea
           >
         </div>
@@ -111,11 +115,7 @@
         // [groupName, [list of button]]
         ['style', ['bold', 'italic', 'underline', 'clear']],
         ['font', ['strikethrough', 'superscript', 'subscript']],
-        ['fontsize', ['fontsize']],
-        ['color', ['color']],
         ['para', ['ul', 'ol', 'paragraph']],
-        ['table', ['table']],
-        ['height', ['height']],
         ['insert', ['link']],
       ],
     });

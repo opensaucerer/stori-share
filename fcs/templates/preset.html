@@ -6,8 +6,17 @@
 
     <!-- This will be fired if javascript is disabled in the client's browser-->
     <noscript>
-      You currently have JavaScript disabled. This App requires JavaScript.<br />
-      Enable JavaScript in Your Browser to Continue Telling your Story!
+      <style type="text/css">
+        div#page-wrapper {
+          display: none !important;
+          visibility: hidden !important;
+        }
+      </style>
+
+      <div>
+        You currently have JavaScript disabled. This App requires JavaScript.<br />
+        Enable JavaScript in Your Browser to Continue Telling your Story!
+      </div>
     </noscript>
 
     <!-- Halfmoon CSS -->
@@ -163,6 +172,7 @@
               src="{{ url_for('static', filename='img/profile_pic/' + current_user.profile_pic) }}"
               class="nav-icon"
               alt="Profile Picture"
+              style="border: 1px solid grey; border-radius: 50%"
             />
           </a>
           {% else %}
@@ -192,6 +202,7 @@
                 src="{{ url_for('static', filename='img/profile_pic/' + current_user.profile_pic) }}"
                 class="nav-icon"
                 alt="Profile Picture"
+                style="border: 1px solid grey; border-radius: 50%"
               />
             </div>
             {% else %}

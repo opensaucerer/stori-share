@@ -29,6 +29,7 @@ class User(db.Model, UserMixin):
     likes_count = db.Column(db.Integer, nullable=False, default=0)
     about = db.Column(db.String, nullable=False, default=about)
     stories = db.relationship('Story', backref='author', lazy=True)
+    collections = db.relationship('Collection', backref='author', lazy=True)
     liked = db.relationship(
         'Storylikes',
         foreign_keys='Storylikes.user_id',
@@ -51,6 +52,11 @@ class User(db.Model, UserMixin):
         return Storylikes.query.filter(
             Storylikes.user_id == self.id,
             Storylikes.story_id == story.id).count() > 0
+
+    def has_bookmarked_story(self, story):
+        return Collection.query.filter(
+            Collection.user_id == self.id,
+            Collection.collection_id == story.id).count() > 0
 
 # defining the representation state of the User class (Model)
     def __repr__(self):
@@ -86,3 +92,16 @@ class Storylikes(db.Model):
     story_id = db.Column(
         db.Integer, db.ForeignKey('story.id'), nullable=False)
 # defining the storylikes (Model) end
+
+
+# defining the Collections class (Model)
+class Collection(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    collection_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(
+        db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+# defining the representation state of the Collections class (Model)
+    def __repr__(self):
+        return f"Collection('{self.collection_id}', '{self.user_id}')"
+# defining the Collections class (Model) end

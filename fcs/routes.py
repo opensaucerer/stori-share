@@ -6,7 +6,7 @@ from flask import Flask, render_template, url_for, redirect, flash, jsonify, req
 from werkzeug.utils import secure_filename
 from fcs import app, db, bcrypt
 from fcs.forms import RegistrationForm, LoginForm, StoryForm, ProfileForm
-from fcs.models import User, Story
+from fcs.models import User, Story, Collection
 from fcs.articles import Articles
 from fcs.exceptions import RequestError
 from fcs.others import generate_url
@@ -341,7 +341,7 @@ def story_upload():
 @app.route('/stories/like/<story_id>/<action>', methods=["POST", "GET"])
 @login_required
 def add_like(story_id, action):
-    # getting story for db
+    # getting story from db
     story = Story.query.get(story_id)
 
     # checking if story exists
@@ -438,12 +438,46 @@ def delete_story(id):
     return redirect(url_for('dashboard'))
 
 
-# read story route
-@app.route('/collections', methods=["GET", "POST"])
+# add to collections route
+@app.route('/collections/<story_id>/<action>', methods=["POST", "GET"])
+@login_required
+def mod_collections(story_id, action):
+    # getting story from db
+    story = Story.query.get(story_id)
+    # checking if story exists
+    if story:
+        if action == 'add':
+            # adding story to collections
+            new_collection = Collection(
+                collection_id=story_id, author=current_user)
+            db.session.add(new_collection)
+            db.session.commit()
+            # adding new collection end
+            message = {"message": "success"}
+            return jsonify(message), 201
+
+        if action == 'remove':
+            collection = Collection.query.filter_by(
+                user_id=current_user.id, collection_id=story_id).first()
+            db.session.delete(collection)
+            db.session.commit()
+            message = {"message": "success"}
+            return jsonify(message), 201
+
+    else:
+        raise RequestError('failed')
+
+
+# view collections route
+@app.route('/collections')
 @login_required
 def collections():
     # defining variables
-    blog_title = "Collections | Your Favorite Stories"
-    # getting story from db
+    blog_title = "Collections | All The Stories You Love"
 
-    return render_template('collections.html', title=blog_title)
+    # getting collections from db
+    story = Story
+    collections = Collection.query.filter_by(user_id=current_user.id)
+    collection_count = collections.count()
+
+    return render_template('collections.html', title=blog_title, collections=collections, story=story, collection_count=collection_count)
