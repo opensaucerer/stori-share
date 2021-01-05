@@ -41,8 +41,8 @@ displaySwitch.addEventListener('click', () => {
 
 //returning a message when the search icon is clicked
 search.addEventListener('click', function (event) {
-  event.preventDefault();
-  alert ('shit')
+  
+
   halfmoon.initStickyAlert({
     content:
       "Thank's for using StoriShare. Our search functionality is coming soon",
