@@ -161,7 +161,7 @@
           async function modCollections() {
             res = await fetch(`/collections/${cid.dataset.storyid}/remove`);
             data = await res.json();
-            console.log(data, res.message);
+            console.log(data, res.status);
 
             if (data.message == 'success') {
               cid.classList.toggle('clicked');
@@ -173,7 +173,7 @@
           async function modCollections() {
             res = await fetch(`/collections/${cid.dataset.storyid}/add`);
             data = await res.json();
-            console.log(data, res.message);
+            console.log(data, res.status);
 
             if (data.message == 'success') {
               cid.classList.toggle('clicked');

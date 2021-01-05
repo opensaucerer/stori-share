@@ -453,6 +453,11 @@ def mod_collections(story_id, action):
     # checking if story exists
     if story:
         if action == 'add':
+            # checking if collection exists
+            exisiting_collection = Collection.query.filter_by(
+                user_id=current_user.id, collection_id=story.id).first()
+            if exisiting_collection:
+                raise RequestError('failed')
             # adding story to collections
             new_collection = Collection(
                 collection_id=story.id, user_id=current_user.id)
