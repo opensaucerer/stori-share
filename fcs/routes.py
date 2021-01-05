@@ -6,7 +6,7 @@ from flask import Flask, render_template, url_for, redirect, flash, jsonify, req
 from werkzeug.utils import secure_filename
 from fcs import app, db, bcrypt
 from fcs.forms import RegistrationForm, LoginForm, StoryForm, ProfileForm
-from fcs.models import User, Story, Collection
+from fcs.models import User, Story, Collection, Storylikes
 from fcs.articles import Articles
 from fcs.exceptions import RequestError
 from fcs.others import generate_url
@@ -36,7 +36,7 @@ def home():
 
 
 # about route
-@app.route('/about')
+@ app.route('/about')
 def about():
     # defining variables
     blog_title = "About | Everyone Has A Story To Tell"
@@ -46,7 +46,7 @@ def about():
 
 
 # registration route
-@app.route('/signup', methods=["POST", "GET"])
+@ app.route('/signup', methods=["POST", "GET"])
 def register():
     # defining variables
     form = RegistrationForm()
@@ -95,7 +95,7 @@ def register():
 
 
 # login route
-@app.route('/signin', methods=["POST", "GET"])
+@ app.route('/signin', methods=["POST", "GET"])
 def login():
 
     user_data = request.get_json()
@@ -155,8 +155,8 @@ def login():
 
 
 # logout route
-@app.route('/signout')
-@login_required
+@ app.route('/signout')
+@ login_required
 def logout():
     # logging out user
     logout_user()
@@ -186,7 +186,7 @@ def bg_save(image):
 
 
 # dashboard route
-@app.route('/<username>', methods=["GET", "POST"])
+@ app.route('/<username>', methods=["GET", "POST"])
 def dashboard(username):
     # getting url parameters (args)
     status = request.args.get("status")
@@ -206,6 +206,7 @@ def dashboard(username):
                 'static', filename='img/profile_bg/' + user.profile_bg)
 
         story = Story
+        storylikes = Storylikes
         posts = Story.query.filter_by(user_id=user.id)
         blog_title = f"@{username} Stories In One View"
         form = ProfileForm()
@@ -247,12 +248,12 @@ def dashboard(username):
         # checking if URL Parameter exisits before rendring
         if status == 'new-post':
             flash('Your Story is Live', 'success')
-            return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, story=story, post_count=post_count, user=user)
+            return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, story=story, storylikes=storylikes, post_count=post_count, user=user)
         elif status == 'updated-post':
             flash('Your Story Has Been Updated', 'success')
-            return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, story=story, post_count=post_count, user=user)
+            return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, story=story, storylikes=storylikes, post_count=post_count, user=user)
         else:
-            return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, story=story, post_count=post_count, user=user)
+            return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, story=story, storylikes=storylikes, post_count=post_count, user=user)
         # checking if URL Parameter exisits before rendring end
 
     else:
@@ -262,8 +263,8 @@ def dashboard(username):
 
 
 # New story route
-@app.route('/stories/new', methods=["POST", "GET"])
-@login_required
+@ app.route('/stories/new', methods=["POST", "GET"])
+@ login_required
 def new_story():
     # defining variables
     blog_title = "New Story | Let's Get Your Story Live"
@@ -273,8 +274,8 @@ def new_story():
 
 
 # route for getting new stories
-@app.route('/stories/create_story', methods=["POST", "GET"])
-@login_required
+@ app.route('/stories/create_story', methods=["POST", "GET"])
+@ login_required
 def create_story():
     # getting story from json
     data = request.get_json()
@@ -312,8 +313,8 @@ def save_image(image):
 
 
 # route for getting new stories
-@app.route('/stories/story_upload', methods=["POST"])
-@login_required
+@ app.route('/stories/story_upload', methods=["POST"])
+@ login_required
 def story_upload():
 
     if request.method == "POST":
@@ -338,8 +339,8 @@ def story_upload():
 
 
 # Like Story route
-@app.route('/stories/like/<story_id>/<action>', methods=["POST", "GET"])
-@login_required
+@ app.route('/stories/like/<story_id>/<action>', methods=["POST", "GET"])
+@ login_required
 def add_like(story_id, action):
     # getting story from db
     story = Story.query.get(story_id)
@@ -369,7 +370,7 @@ def add_like(story_id, action):
 
 
 # read story route
-@app.route('/stories/<id>/<title>')
+@ app.route('/stories/<id>/<title>')
 def story(id, title):
     # defining variables
     # posts = Story.query.all()
@@ -382,8 +383,8 @@ def story(id, title):
 
 
 # read story route
-@app.route('/edit_story/<id>/edit', methods=["POST", "GET"])
-@login_required
+@ app.route('/edit_story/<id>/edit', methods=["POST", "GET"])
+@ login_required
 def edit_story(id):
 
     if request.method == 'POST':
@@ -426,21 +427,26 @@ def edit_story(id):
 
 
 # read story route
-@app.route('/delete_story/<id>', methods=["POST"])
-@login_required
+@ app.route('/delete_story/<id>', methods=["POST"])
+@ login_required
 def delete_story(id):
     # getting story from db
     story = Story.query.get(id)
-    # deleting story from db
-    db.session.delete(story)
-    db.session.commit()
-
-    return redirect(url_for('dashboard'))
+    if story:
+        # deleting story from db
+        story.author.likes_count -= story.likes.count()
+        db.session.delete(story)
+        db.session.commit()
+        flash("Your Story Was Deleted", "success")
+        return redirect(url_for('dashboard', username=current_user.username))
+    else:
+        flash("We Couldn't Find That Story", "danger")
+        return redirect(url_for('dashboard', username=current_user.username))
 
 
 # add to collections route
-@app.route('/collections/<story_id>/<action>', methods=["POST", "GET"])
-@login_required
+@ app.route('/collections/<story_id>/<action>', methods=["POST", "GET"])
+@ login_required
 def mod_collections(story_id, action):
     # getting story from db
     story = Story.query.get(story_id)
@@ -449,7 +455,7 @@ def mod_collections(story_id, action):
         if action == 'add':
             # adding story to collections
             new_collection = Collection(
-                collection_id=story_id, author=current_user)
+                collection_id=story.id, user_id=current_user.id)
             db.session.add(new_collection)
             db.session.commit()
             # adding new collection end
@@ -458,7 +464,7 @@ def mod_collections(story_id, action):
 
         if action == 'remove':
             collection = Collection.query.filter_by(
-                user_id=current_user.id, collection_id=story_id).first()
+                user_id=current_user.id, collection_id=story.id).first()
             db.session.delete(collection)
             db.session.commit()
             message = {"message": "success"}
@@ -469,8 +475,8 @@ def mod_collections(story_id, action):
 
 
 # view collections route
-@app.route('/collections')
-@login_required
+@ app.route('/collections')
+@ login_required
 def collections():
     # defining variables
     blog_title = "Collections | All The Stories You Love"
@@ -479,5 +485,7 @@ def collections():
     story = Story
     collections = Collection.query.filter_by(user_id=current_user.id)
     collection_count = collections.count()
+    for collection in collections:
+        print(story.query.get(collection.collection_id))
 
     return render_template('collections.html', title=blog_title, collections=collections, story=story, collection_count=collection_count)

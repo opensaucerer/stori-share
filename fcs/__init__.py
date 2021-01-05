@@ -13,6 +13,7 @@ from flask_migrate import Migrate
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "b8acd37382011732dc7b2ecadf6497a7"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 CORS(app)

@@ -376,8 +376,25 @@
           </div>
         </div>
       </div>
+
       {% endif %}
       <!-- Edit profile modal end -->
+
+      <!-- Deleted Story Modal -->
+
+      <div class="modal" id="modal-2" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <p>Uh Oh! You are about to delete a story 😱</p>
+            <div class="text-right mt-20 modal-2">
+              <a href="#" class="btn mr-5" role="button">Cancel</a>
+              <a href="#" class="btn btn-primary" role="button">Proceed</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delete Story Modal end -->
 
       <div class="content-wrapper" style="top: 5rem">
         <div class="container" style="max-width: 100% !important">
@@ -561,6 +578,8 @@
                       href="#modal-2"
                       class="btn btn-default btn-sm"
                       type="button"
+                      id="delete"
+                      data-storyid="{{ post.id }}"
                       >Delete</a
                     >
 
@@ -612,5 +631,9 @@
     <!-- <script src="https://cdn.jsdelivr.net/gh/halfmoonui/halfmoon@1.0.3/js/halfmoon.min.js"></script> -->
 
     <script src="{{ url_for('static', filename='js/halfmoon-1.0.4/js/halfmoon.min.js') }}"></script>
+
+    <!-- importing custom JavaScript -->
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <!-- importing custom JavaScript end -->
   </body>
 </html>

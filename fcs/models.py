@@ -29,7 +29,6 @@ class User(db.Model, UserMixin):
     likes_count = db.Column(db.Integer, nullable=False, default=0)
     about = db.Column(db.String, nullable=False, default=about)
     stories = db.relationship('Story', backref='author', lazy=True)
-    collections = db.relationship('Collection', backref='author', lazy=True)
     liked = db.relationship(
         'Storylikes',
         foreign_keys='Storylikes.user_id',
@@ -75,11 +74,15 @@ class Story(db.Model):
                             default=datetime.utcnow)
     user_id = db.Column(
         db.Integer, db.ForeignKey('user.id'), nullable=False)
-
+    collections = db.relationship(
+        'Collection', backref='story', cascade="all,delete", lazy=True)
     likes = db.relationship(
-        'Storylikes', backref='story', lazy='dynamic')
+        'Storylikes', backref='story', cascade="all,delete", lazy='dynamic')
+
 
 # defining the representation state of the Post class (Model)
+
+
     def __repr__(self):
         return f"Story('{self.title}', '{self.date_posted}', '{self.author}', '{self.likes}')"
 # defining the Post class (Model) end
@@ -97,9 +100,9 @@ class Storylikes(db.Model):
 # defining the Collections class (Model)
 class Collection(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    collection_id = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(
-        db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, nullable=False)
+    collection_id = db.Column(
+        db.Integer, db.ForeignKey('story.id'), nullable=False)
 
 # defining the representation state of the Collections class (Model)
     def __repr__(self):
