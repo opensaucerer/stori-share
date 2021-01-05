@@ -40,7 +40,7 @@ displaySwitch.addEventListener('click', () => {
 // Setting Display Mode end
 
 //returning a message when the search icon is clicked
-search.addEventListener('click', function (event) {
+search.addEventListener('click', function () {
   alert('shit');
 
   halfmoon.initStickyAlert({
