@@ -146,7 +146,7 @@ def login():
         elif existing_user:
             flash("Invalid Sign In Password", "danger")
         else:
-            flash("User Does not Exist", "danger")
+            flash("That User Does not Exist", "danger")
         # checking if password matches signup password end
             # sending flased message end
 
@@ -257,7 +257,7 @@ def dashboard(username):
         # checking if URL Parameter exisits before rendring end
 
     else:
-        flash('User Does Not Exist', 'danger')
+        flash('That User Does Not Exist', 'danger')
         return redirect(url_for('home'))
     # allowing access only if user exist end
 

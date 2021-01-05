@@ -86,6 +86,48 @@
   >
     <!-- Page wrapper start -->
     <div id="page-wrapper" class="page-wrapper with-navbar">
+      <!-- rendering sticky alerts start -->
+      <div class="sticky-alerts">
+        <!-- Collecting flashed messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+
+        <!-- checking if there are flashed messages -->
+        {% if messages %}
+        <!-- Looping thorugh the flashed messages -->
+        {% for category,message in messages %}
+
+        <!-- Rending the gotten message -->
+        <script>
+          window.onload = function () {
+            halfmoon.toastAlert('precompiled-alert-1', 4000);
+          };
+        </script>
+
+        <div
+          id="precompiled-alert-1"
+          class="alert alert-{{ category }} filled-lm"
+        >
+          <button
+            class="close"
+            data-dismiss="alert"
+            type="button"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+          <h4 class="alert-heading">{{ message }}</h4>
+        </div>
+        <!-- Rending the gotten message end -->
+        {% endfor %}
+        <!-- Looping thorugh the flashed messages end -->
+        {% endif %}
+        <!-- checking if there are flashed messages end -->
+
+        {% endwith %}
+        <!-- Collecting flashed messages end -->
+      </div>
+      <!-- rendering sticky alerts end -->
+
       <!-- Navbar start -->
       <nav class="navbar">
         <a href="{{ url_for('home') }}" class="navbar-brand ml-10 ml-sm-15">
@@ -138,7 +180,7 @@
             {% endif %}
 
             <!-- Search Icon -->
-            <a href="{{ url_for('home') }}" class="nav-link">
+            <a id="search" href="#" class="nav-link">
               <i
                 class="fa fa-search"
                 aria-hidden="true"
@@ -278,37 +320,6 @@
       <!-- Navbar end -->
 
       <div class="content-wrapper" style="top: 5rem">
-        <div class="container" style="max-width: 100% !important">
-          <!-- Collecting flashed messages -->
-          {% with messages = get_flashed_messages(with_categories=true) %}
-
-          <!-- checking if there are flashed messages -->
-          {% if messages %}
-          <!-- Looping thorugh the flashed messages -->
-          {% for category,message in messages %}
-
-          <!-- Rending the gotten message -->
-          <div class="alert alert-{{ category }}" role="alert">
-            <button
-              class="close"
-              data-dismiss="alert"
-              type="button"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-            <h4 class="alert-heading text-center">{{ message }}</h4>
-          </div>
-          <!-- Rending the gotten message end -->
-          {% endfor %}
-          <!-- Looping thorugh the flashed messages end -->
-          {% endif %}
-          <!-- checking if there are flashed messages end -->
-
-          {% endwith %}
-          <!-- Collecting flashed messages end -->
-        </div>
-
         <!-- Rending content to be overwritten -->
         {% block content %} {% endblock content %}
         <!-- Rending content to be overwritten end -->
