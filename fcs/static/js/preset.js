@@ -41,7 +41,6 @@ displaySwitch.addEventListener('click', () => {
 
 //returning a message when the search icon is clicked
 search.addEventListener('click', function () {
-  alert('shit');
 
   halfmoon.initStickyAlert({
     content:
