@@ -166,6 +166,11 @@
 
             if (data.message == 'success') {
               cid.classList.toggle('clicked');
+              halfmoon.initStickyAlert({
+                title: 'Successfully removed from your collections',
+                alertType: 'alert-success',
+                fillType: 'filled-lm',
+              });
             }
           }
           modCollections();
@@ -178,6 +183,12 @@
 
             if (data.message == 'success') {
               cid.classList.toggle('clicked');
+
+              halfmoon.initStickyAlert({
+                title: 'Successfully added to your collections',
+                alertType: 'alert-success',
+                fillType: 'filled-lm',
+              });
             }
           }
           modCollections();
