@@ -284,3 +284,12 @@ main {
 .img-con img {
     height: 230px !important;
 }
+
+.fa-heart,
+.fa-bookmark {
+    font-size: 15px;
+    cursor: pointer !important;
+}
+.clicked {
+    color: red !important;
+}

@@ -3,7 +3,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_ckeditor import CKEditorField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp
 from fcs.models import User
 from flask_login import current_user
 # importing the required modules end
@@ -15,8 +15,8 @@ FORBIDEN_NAMES = ['signin', 'signup', 'signout', 'about', 'collections']
 # defining the registration form class
 class RegistrationForm(FlaskForm):
 
-    username = StringField("Username", validators=[
-        DataRequired(), Length(min=3, max=10, message="Username must be between 3 and 10 characters")], render_kw={
+    username = StringField("Username", validators=[Regexp('[_+0-9a-zA-Z]+', message='Username can only contain letters, numbers, and underscores'),
+                                                   DataRequired(), Length(min=3, max=10, message="Username must be between 3 and 10 characters")], render_kw={
         'autocomplete': 'username'})
     email = StringField("Email", validators=[DataRequired(), Email()], render_kw={
         'autocomplete': 'email'})

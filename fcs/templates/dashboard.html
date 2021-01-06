@@ -176,9 +176,8 @@
             {% endif %}
 
             <!-- Search Icon -->
-            <a  id="search" class="nav-link">
+            <a id="search" class="nav-link">
               <i
-               
                 class="fa fa-search"
                 aria-hidden="true"
                 style="font-size: 18px"
@@ -315,6 +314,71 @@
         </div>
       </nav>
       <!-- Navbar end -->
+
+      <!-- Login Modal -->
+      <!-- First comes the modal -->
+
+      {% if not current_user.is_authenticated %}
+      <div class="modal" id="modal-3" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <a href="#" class="btn close" role="button" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </a>
+            <h5 class="modal-title">You Must Be Signed In</h5>
+            <form action="" method="" class="form-signin">
+              {{login_form.hidden_tag()}}
+
+              <fieldset class="form-group">
+                <div class="form-group">
+                  {{login_form.email.label(class="form-control-label")}}
+                  {{login_form.email(class="form-control")}}
+
+                  <small class="invalid-feedback" id="em">{{ error }}</small>
+                </div>
+                <div class="form-group">
+                  {{login_form.password.label(class="form-control-label")}}
+                  {{login_form.password(class="form-control")}}
+                  <small class="invalid-feedback" id="pass">{{ error }}</small>
+                </div>
+                <div class="custom-checkbox mb-20">
+                  {{login_form.remember_me(class="form-check-input")}}
+                  {{login_form.remember_me.label(class="form-check-label")}}
+                </div>
+
+                <div class="form-group submit">
+                  <button
+                    id="submit"
+                    class="btn btn-lg btn-primary btn-block"
+                    type="button"
+                  >
+                    <i class="fa"></i> Sign In
+                  </button>
+                </div>
+                <p class="text-muted text-center">
+                  <a href="{{ url_for('register') }}">Forgot Password?</a>
+                </p>
+
+                <!-- Redirecting to Sign Up page for new users -->
+                <div class="form-group">
+                  <p class="text-muted text-center">
+                    Don't Have an Account?
+                    <a href="{{ url_for('register') }}">Sign Up Here</a>
+                  </p>
+                </div>
+                <!-- Redirecting to Sign In page for exsiting users end-->
+
+                <!-- Copyrights Section -->
+                <p class="text-center">&copy; {{current_year}}</p>
+                <!-- Copyrights Section end -->
+              </fieldset>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Login Modal End -->
 
       <!-- Edit Profile Modal -->
       {% if current_user.username == username %}
@@ -584,7 +648,8 @@
                     <p class="font-size-16">{{ post.title }}</p></a
                   >
                   <div class="d-flex align-items-center">
-                    {% if current_user.username == username %}
+                    {% if current_user.is_authenticated and
+                    current_user.username == username %}
 
                     <a
                       href="#modal-2"
@@ -607,7 +672,31 @@
                       </div>
                     </div>
                     {% else %}
-                    <div></div>
+
+                    <div id="lcon">
+                      {% if current_user.is_authenticated %} {% if
+                      current_user.has_liked_story(post) %}
+                      <i
+                        id="story-id"
+                        data-storyid="{{ post.id }}"
+                        class="fa fa-heart clicked"
+                      ></i>
+                      {% else %}
+                      <i
+                        id="story-id"
+                        data-storyid="{{ post.id }}"
+                        class="fa fa-heart"
+                      ></i>
+                      {% endif %} {% else %}
+                      <i
+                        id="story-id"
+                        data-storyid="{{ post.id }}"
+                        class="fa fa-heart"
+                      ></i>
+                      {% endif %}
+
+                      <span class="lspan">{{ post.likes.count() }}</span>
+                    </div>
 
                     <div class="btn-group">
                       <div class="btn-group">
@@ -638,6 +727,160 @@
         <!-- Rending content to be overwritten end -->
       </div>
     </div>
+
+    <!-- custom javascript -->
+    <script>
+      // getting elements from the DOM
+      const likes = document.querySelectorAll('#lcon');
+      const collections = document.querySelectorAll('#bcon');
+      // Getting elements from the DOM end
+
+      // lopping through each collections icon
+      collections.forEach((collection) => {
+        const cid = collection.querySelector('#collections-id');
+        cid.addEventListener('click', function () {
+          if ('{{ current_user.is_authenticated }}' == 'True') {
+            if (cid.classList == 'fa fa-bookmark clicked') {
+              // calling API to update collections
+              async function modCollections() {
+                res = await fetch(`/collections/${cid.dataset.storyid}/remove`);
+                data = await res.json();
+                console.log(data, res.status);
+
+                if (data.message == 'success') {
+                  cid.classList.toggle('clicked');
+                }
+              }
+              modCollections();
+            } else {
+              // calling API to update collections
+              async function modCollections() {
+                res = await fetch(`/collections/${cid.dataset.storyid}/add`);
+                data = await res.json();
+                console.log(data, res.status);
+
+                if (data.message == 'success') {
+                  cid.classList.toggle('clicked');
+                }
+              }
+              modCollections();
+            }
+          } else {
+            window.location.href = '#modal-3';
+          }
+        });
+      });
+      // lopping through each collections icon end
+
+      // lopping through each thumps_up icon
+      likes.forEach((like) => {
+        //getting story-id element
+        const lid = like.querySelector('#story-id');
+        // adding click event to each thumb_up icon
+        lid.addEventListener('click', function () {
+          function loginStatus(status) {
+            if (status == 'True') {
+              if (lid.classList == 'fa fa-heart clicked') {
+                // calling API to update number of likes
+                async function addLikes() {
+                  res = await fetch(
+                    `/stories/like/${lid.dataset.storyid}/unlike`
+                  );
+                  data = await res.json();
+                  console.log(data, res.status);
+
+                  if (data.status == 'success') {
+                    like.querySelector('.lspan').innerText = data.count;
+                    lid.classList.toggle('clicked');
+                  }
+                }
+                addLikes();
+              } else {
+                // calling API to update number of likes
+                async function addLikes() {
+                  res = await fetch(
+                    `/stories/like/${lid.dataset.storyid}/like`
+                  );
+                  data = await res.json();
+                  console.log(data, res.status);
+
+                  if (data.status == 'success') {
+                    like.querySelector('.lspan').innerText = data.count;
+                    lid.classList.toggle('clicked');
+                  }
+                }
+                addLikes();
+              }
+            } else {
+              window.location.href = '#modal-3';
+            }
+          }
+          loginStatus('{{ current_user.is_authenticated }}');
+        });
+      });
+      // adding click event to each thumb_up icon end
+      // lopping through each thumps_up icon end
+
+      //controlling login through modal
+      const submit = document.getElementById('submit');
+      const email = document.getElementById('email');
+      const password = document.getElementById('password');
+      const remember_me = document.getElementById('remember_me');
+      const em = document.querySelector('#em');
+      const pass = document.querySelector('#pass');
+      submit.addEventListener('click', loginUser);
+
+      async function loginUser() {
+        event.preventDefault();
+        submit.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Signing In';
+
+        if (email.value && password.value) {
+          em.innerText = '';
+          pass.innerText = '';
+          InitiateLogin();
+        } else if (!email.value && !password.value) {
+          em.innerText = "Email Can't Be Empty";
+          pass.innerText = "Password Can't Be Empty";
+          submit.innerText = `Sign In`;
+        } else if (!email.value) {
+          em.innerText = "Email Can't Be Empty";
+          pass.innerText = '';
+          submit.innerText = `Sign In`;
+        } else if (!password.value) {
+          em.innerText = '';
+          pass.innerText = "Password Can't Be Empty";
+          submit.innerText = `Sign In`;
+        }
+
+        async function InitiateLogin() {
+          res = await fetch('\signin', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: email.value,
+              password: password.value,
+              remember_me: remember_me.checked,
+            }),
+          });
+
+          response = await res.json();
+          if (response.message == 'Login Successful') {
+            [goto, _] = window.location.href.split('#modal-3');
+            window.location.href = goto;
+          } else if (response.message == 'Invalid Password') {
+            em.innerText = '';
+            pass.innerText = 'Check Details and Try Again';
+            submit.innerText = `Sign In`;
+          } else {
+            em.innerText = 'Check Details and Try Again';
+            pass.innerText = 'Check Details and Try Again';
+            submit.innerText = `Sign In`;
+          }
+        }
+      }
+    </script>
 
     <!-- Halfmoon JS -->
     <!-- <script src="https://cdn.jsdelivr.net/gh/halfmoonui/halfmoon@1.0.3/js/halfmoon.min.js"></script> -->

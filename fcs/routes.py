@@ -210,6 +210,7 @@ def dashboard(username):
         posts = Story.query.filter_by(user_id=user.id)
         blog_title = f"@{username} Stories In One View"
         form = ProfileForm()
+        login_form = LoginForm()
         about = user.about
         post_count = posts.count()
         profile_pic = url_for(
@@ -248,12 +249,12 @@ def dashboard(username):
         # checking if URL Parameter exisits before rendring
         if status == 'new-post':
             flash('Your Story is Live', 'success')
-            return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, story=story, storylikes=storylikes, post_count=post_count, user=user)
+            return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, login_form=login_form, story=story, storylikes=storylikes, post_count=post_count, user=user)
         elif status == 'updated-post':
             flash('Your Story Has Been Updated', 'success')
-            return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, story=story, storylikes=storylikes, post_count=post_count, user=user)
+            return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, login_form=login_form, story=story, storylikes=storylikes, post_count=post_count, user=user)
         else:
-            return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, story=story, storylikes=storylikes, post_count=post_count, user=user)
+            return render_template('dashboard.html', title=blog_title, about=about, username=username, bg_img=bg_img, profile_pic=profile_pic, posts=posts, form=form, login_form=login_form, story=story, storylikes=storylikes, post_count=post_count, user=user)
         # checking if URL Parameter exisits before rendring end
 
     else:
@@ -432,7 +433,7 @@ def edit_story(id):
 def delete_story(id):
     # getting story from db
     story = Story.query.get(id)
-    if story:
+    if story and current_user == story.author:
         # deleting story from db
         story.author.likes_count -= story.likes.count()
         db.session.delete(story)
