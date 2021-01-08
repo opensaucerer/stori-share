@@ -36,11 +36,7 @@ def Articles():
          "author": "sam",
          "likes": "2",
          "id": 6},
-        {"title": "First Article",
-         "content": "This is just a dummy data",
-         "author": "samperfect",
-         "likes": "0",
-         "id": 7}
+
     ]
 
     return posts

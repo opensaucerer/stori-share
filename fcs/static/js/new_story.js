@@ -39,16 +39,6 @@ title.addEventListener('input', function (event) {
   }
 });
 
-// storied.addEventListener("input", function (event) {
-//   var currentContent = $("#editor").summernote("code");
-//   alert("shit");
-//   if (currentContent.trim().length == 0 || currentContent.trim().length < 100) {
-//     error2.innerText = "Your Story Is Too Short";
-//   } else if (currentContent.trim().length >= 100) {
-//     error2.innerText = "";
-//   }
-// });
-
 btn.onclick = async function (event) {
   var myContent = $('#editor').summernote('code');
   if (title.value.length == 0) {
@@ -68,8 +58,6 @@ btn.onclick = async function (event) {
   } else {
     event.preventDefault();
     btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Publishing';
-    // spin.className = "fa fa-spinner fa-spin";
-    // btn.innerText = "Publishing";
 
     const formData = new FormData();
 

@@ -1,6 +1,6 @@
 # importing the required modules
 from datetime import datetime
-from fcs import db, login_manager
+from fcs import db, login_manager, bcrypt
 from flask_login import UserMixin
 # importing the required modules end
 
@@ -14,6 +14,16 @@ about = "Uh Oh! Apparently, this user prefers to keep an air of mystery around t
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
+
+
+# defining the association table for the followers model
+followers = db.Table('followers',
+                     db.Column('follower_id', db.Integer,
+                               db.ForeignKey('user.id')),
+                     db.Column('followed_id', db.Integer,
+                               db.ForeignKey('user.id'))
+                     )
+# defining the association table for the followers model end
 
 
 # defining the User class (Model)
@@ -33,7 +43,20 @@ class User(db.Model, UserMixin):
         'Storylikes',
         foreign_keys='Storylikes.user_id',
         backref='user', lazy='dynamic')
+    followed = db.relationship(
+        'User', secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
+    def set_password(self, password):
+        return bcrypt.generate_password_hash(
+            password).decode('utf-8')
+
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.password, password)
+
+    # method to like and unlike stories and check if user has liked a story
     def like_story(self, story):
         if not self.has_liked_story(story):
             like = Storylikes(user_id=self.id, story_id=story.id)
@@ -51,13 +74,41 @@ class User(db.Model, UserMixin):
         return Storylikes.query.filter(
             Storylikes.user_id == self.id,
             Storylikes.story_id == story.id).count() > 0
+    # method to like and unlike stories and check if user has liked a story end
 
+    # method to check if user has bookmarked a story
     def has_bookmarked_story(self, story):
         return Collection.query.filter(
             Collection.user_id == self.id,
             Collection.collection_id == story.id).count() > 0
+    # method to check if user has bookmarked a story end
+
+    # method to follow and unfollow users and check if user has followed another user
+    def follow(self, user):
+        if not self.is_following(user):
+            self.followed.append(user)
+
+    def unfollow(self, user):
+        if self.is_following(user):
+            self.followed.remove(user)
+
+    def is_following(self, user):
+        return self.followed.filter(
+            followers.c.followed_id == user.id).count() > 0
+    # method to follow and unfollow users and check if user has followed another user end
+
+    # getting list of posts for a personalized timeline
+    def followed_posts(self):
+        followed = Story.query.join(
+            followers, (followers.c.followed_id == Story.user_id)).filter(
+                followers.c.follower_id == self.id)
+        own = Story.query.filter_by(user_id=self.id)
+        return followed.union(own).order_by(Story.date_posted.desc())
+    # getting list of posts for a personalized timeline end
+
 
 # defining the representation state of the User class (Model)
+
     def __repr__(self):
         return f"User('{self.username}', '{self.email}', '{self.profile_pic}', '{self.profile_bg}')"
 # defining the User class (Model) end
@@ -70,7 +121,7 @@ class Story(db.Model):
     content = db.Column(db.Text, nullable=False)
     story_image = db.Column(
         db.String(20), nullable=False)
-    date_posted = db.Column(db.DateTime, nullable=False,
+    date_posted = db.Column(db.DateTime, index=True, nullable=False,
                             default=datetime.utcnow)
     user_id = db.Column(
         db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -79,10 +130,7 @@ class Story(db.Model):
     likes = db.relationship(
         'Storylikes', backref='story', cascade="all,delete", lazy='dynamic')
 
-
 # defining the representation state of the Post class (Model)
-
-
     def __repr__(self):
         return f"Story('{self.title}', '{self.date_posted}', '{self.author}', '{self.likes}')"
 # defining the Post class (Model) end

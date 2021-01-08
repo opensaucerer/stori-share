@@ -293,3 +293,7 @@ main {
 .clicked {
     color: red !important;
 }
+
+.following{
+    font-weight: bolder;
+}

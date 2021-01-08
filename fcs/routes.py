@@ -7,14 +7,12 @@ from werkzeug.utils import secure_filename
 from fcs import app, db, bcrypt
 from fcs.forms import RegistrationForm, LoginForm, StoryForm, ProfileForm
 from fcs.models import User, Story, Collection, Storylikes
-from fcs.articles import Articles
 from fcs.exceptions import RequestError
 from fcs.others import generate_url
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_cors import CORS, cross_origin
 # importing required modules end
 
-# posts = Articles()
 
 # defining config variables
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -62,7 +60,6 @@ def register():
     if form.validate_on_submit():
         # generating the user's profile background image
         bg_url = generate_url()
-
         # generating the user's profile background image end
 
         # generating hashed password
@@ -495,3 +492,36 @@ def collections():
         print(story.query.get(collection.collection_id))
 
     return render_template('collections.html', title=blog_title, collections=collections, story=story, collection_count=collection_count)
+
+
+# follow users route
+@app.route('/follow', methods=['POST'])
+@login_required
+def follow():
+
+    # defining variables
+    data = request.get_json()
+    username = data['username']
+    action = data['action']
+
+    # getting user from the db
+    user_to_follow = User.query.filter_by(username=username).first()
+
+    # validating the user's existence
+    if user_to_follow is None:
+        raise RequestError('user not found')
+
+    if user_to_follow == current_user:
+        raise RequestError('you cannot follow yourself')
+
+    # following the user
+    if action == 'follow':
+        current_user.follow(user_to_follow)
+        db.session.commit()
+        return jsonify({"message": "success", "username": username, "count": user_to_follow.followers.count()}), 201
+
+    # unfollowing the user
+    if action == 'unfollow':
+        current_user.unfollow(user_to_follow)
+        db.session.commit()
+        return jsonify({"message": "success", "username": username, "count": user_to_follow.followers.count()}), 201

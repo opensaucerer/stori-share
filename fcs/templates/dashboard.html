@@ -534,15 +534,19 @@
                 </div>
 
                 <div class="d-flex flex-column likes like">
-                  <span class="likes-count">{{ user.likes_count }}</span>
+                  <span id="likes-count" class="likes-count"
+                    >{{ user.likes_count }}</span
+                  >
                   <span class="likes-title">LIKES</span>
                 </div>
                 <div class="d-flex flex-column likes">
-                  <span class="likes-count">NAN</span>
+                  <span class="likes-count">{{user.followed.count()}}</span>
                   <span class="likes-title">FOLLOWING</span>
                 </div>
                 <div class="d-flex flex-column likes">
-                  <span class="likes-count">NAN</span>
+                  <span id="followers-count" class="likes-count"
+                    >{{user.followers.count()}}</span
+                  >
                   <span class="likes-title">FOLLOWERS</span>
                 </div>
               </div>
@@ -578,17 +582,24 @@
             <!-- About Section End -->
 
             <!-- Edit Profile Using Modal -->
-            {% if current_user.username == username %}
+            {% if current_user.is_authenticated %} {% if current_user.username
+            == username %}
             <div class="edit">
               <a href="#modal-1" class="btn active btn-sm" role="button">
                 <i class="fa fa-pen" style="color: #1890ff"></i> Edit
               </a>
             </div>
-            {%else%}
+            {% elif not current_user.is_following(user) %}
             <div class="follow">
-              <a class="btn btn-sm">
-                <i class="fa fa-plus" style="color: #1890ff"></i> Follow</a
-              >
+              <a class="btn btn-primary btn-sm">Follow</a>
+            </div>
+            {% else %}
+            <div class="follow">
+              <a class="btn btn-primary btn-sm following">Unfollow</a>
+            </div>
+            {% endif %} {% else %}
+            <div class="follow">
+              <a class="btn btn-primary btn-sm">Follow</a>
             </div>
             {% endif %}
             <!-- Edit Profile Using Modal end -->
@@ -733,7 +744,88 @@
       // getting elements from the DOM
       const likes = document.querySelectorAll('#lcon');
       const collections = document.querySelectorAll('#bcon');
+      const follow = document.querySelector('.follow');
+      const followers_count = document.querySelector('#followers-count');
       // Getting elements from the DOM end
+
+      follow.addEventListener('click', async function () {
+        if ('{{ current_user.is_authenticated }}' == 'True') {
+          follow_icon_class = this.querySelector('a');
+
+          if (follow_icon_class.classList == 'btn btn-primary btn-sm') {
+            var follow_data = {
+              username: '{{user.username}}',
+              action: 'follow',
+            };
+            const follow_res = await fetch(`/follow`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(follow_data),
+            });
+
+            if (follow_res.ok) {
+              const follow_data = await follow_res.json();
+              console.log(follow_data);
+              if (follow_data.message == 'success') {
+                follow_icon_class.classList =
+                  'btn btn-primary btn-sm following';
+                follow_icon_class.innerText = 'Unfollow';
+                followers_count.innerText = follow_data.count;
+                halfmoon.initStickyAlert({
+                  title: `You're Now Following ${follow_data.username}`,
+                  alertType: 'alert-success',
+                  fillType: 'filled-lm',
+                });
+              } else {
+                halfmoon.initStickyAlert({
+                  title: 'Failed! Please Try Again',
+                  alertType: 'alert-danger',
+                  fillType: 'filled-lm',
+                });
+              }
+            }
+          } else if (
+            follow_icon_class.classList == 'btn btn-primary btn-sm following'
+          ) {
+            var unfollow_data = {
+              username: '{{ user.username }}',
+              action: 'unfollow',
+            };
+            const unfollow_res = await fetch(`/follow`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(unfollow_data),
+            });
+
+            if (unfollow_res.ok) {
+              const unfollow_data = await unfollow_res.json();
+              console.log(unfollow_data);
+              if (unfollow_data.message == 'success') {
+                follow_icon_class.classList = 'btn btn-primary btn-sm';
+                follow_icon_class.innerText = 'Follow';
+                followers_count.innerText = unfollow_data.count;
+                halfmoon.initStickyAlert({
+                  title: `You're No Longer Following ${unfollow_data.username}`,
+                  alertType: 'alert-success',
+                  fillType: 'filled-lm',
+                });
+              }
+            } else {
+              halfmoon.initStickyAlert({
+                title: `Failed! Please Try Again`,
+                alertType: 'alert-danger',
+                fillType: 'filled-lm',
+              });
+            }
+          }
+        } else {
+          window.location.href = '#modal-3';
+        }
+      });
 
       // lopping through each collections icon
       collections.forEach((collection) => {
@@ -791,6 +883,8 @@
 
                   if (data.status == 'success') {
                     like.querySelector('.lspan').innerText = data.count;
+                    document.querySelector('#likes-count').innerText =
+                      data.count;
                     lid.classList.toggle('clicked');
                   }
                 }
@@ -806,6 +900,8 @@
 
                   if (data.status == 'success') {
                     like.querySelector('.lspan').innerText = data.count;
+                    document.querySelector('#likes-count').innerText =
+                      data.count;
                     lid.classList.toggle('clicked');
                   }
                 }
