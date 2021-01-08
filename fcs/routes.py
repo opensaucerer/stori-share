@@ -356,14 +356,16 @@ def add_like(story_id, action):
             new_likes = story.likes.count()
             db.session.commit()
             # adding new like end
-            message = {"count": new_likes, "status": "success"}
+            message = {"count": new_likes, "status": "success",
+                       "total_count": story.author.likes_count}
             db.session.commit()
             return jsonify(message), 201
 
         if action == 'unlike':
             current_user.unlike_story(story)
             new_likes = story.likes.count()
-            message = {"count": new_likes, "status": "success"}
+            message = {"count": new_likes, "status": "success",
+                       "total_count": story.author.likes_count}
             db.session.commit()
             return jsonify(message), 201
 
@@ -491,17 +493,17 @@ def collections():
 
     # getting collections from db
     story = Story
-    collections = Collection.query.filter_by(user_id=current_user.id)
+    collections = Collection.query.filter_by(
+        user_id=current_user.id).order_by(Collection.date_added.desc())
+
     collection_count = collections.count()
-    for collection in collections:
-        print(story.query.get(collection.collection_id))
 
     return render_template('collections.html', title=blog_title, collections=collections, story=story, collection_count=collection_count)
 
 
 # follow users route
-@app.route('/follow', methods=['POST'])
-@login_required
+@ app.route('/follow', methods=['POST'])
+@ login_required
 def follow():
 
     # defining variables

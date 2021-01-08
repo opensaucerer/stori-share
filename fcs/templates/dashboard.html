@@ -754,7 +754,7 @@
 
           if (follow_icon_class.classList == 'btn btn-primary btn-sm') {
             var follow_data = {
-              username: '{{user.username}}',
+              username: '{{ user.username }}',
               action: 'follow',
             };
             const follow_res = await fetch(`/follow`, {
@@ -778,13 +778,13 @@
                   alertType: 'alert-success',
                   fillType: 'filled-lm',
                 });
-              } else {
-                halfmoon.initStickyAlert({
-                  content: 'Failed! Please try again',
-                  alertType: 'alert-danger',
-                  fillType: 'filled-lm',
-                });
               }
+            } else {
+              halfmoon.initStickyAlert({
+                content: 'Failed! Please try again',
+                alertType: 'alert-danger',
+                fillType: 'filled-lm',
+              });
             }
           } else if (
             follow_icon_class.classList == 'btn btn-primary btn-sm following'
@@ -884,7 +884,7 @@
                   if (data.status == 'success') {
                     like.querySelector('.lspan').innerText = data.count;
                     document.querySelector('#likes-count').innerText =
-                      data.count;
+                      data.total_count;
                     lid.classList.toggle('clicked');
                   }
                 }
@@ -901,7 +901,7 @@
                   if (data.status == 'success') {
                     like.querySelector('.lspan').innerText = data.count;
                     document.querySelector('#likes-count').innerText =
-                      data.count;
+                      data.total_count;
                     lid.classList.toggle('clicked');
                   }
                 }

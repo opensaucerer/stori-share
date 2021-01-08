@@ -151,6 +151,8 @@ class Collection(db.Model):
     user_id = db.Column(db.Integer, nullable=False)
     collection_id = db.Column(
         db.Integer, db.ForeignKey('story.id'), nullable=False)
+    date_added = db.Column(db.DateTime, index=True, nullable=False,
+                           default=datetime.utcnow)
 
 # defining the representation state of the Collections class (Model)
     def __repr__(self):
