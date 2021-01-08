@@ -774,13 +774,13 @@
                 follow_icon_class.innerText = 'Unfollow';
                 followers_count.innerText = follow_data.count;
                 halfmoon.initStickyAlert({
-                  title: `You're Now Following ${follow_data.username}`,
+                  content: `You're now following ${follow_data.username}`,
                   alertType: 'alert-success',
                   fillType: 'filled-lm',
                 });
               } else {
                 halfmoon.initStickyAlert({
-                  title: 'Failed! Please Try Again',
+                  content: 'Failed! Please try again',
                   alertType: 'alert-danger',
                   fillType: 'filled-lm',
                 });
@@ -809,14 +809,14 @@
                 follow_icon_class.innerText = 'Follow';
                 followers_count.innerText = unfollow_data.count;
                 halfmoon.initStickyAlert({
-                  title: `You're No Longer Following ${unfollow_data.username}`,
+                  content: `You're no longer following ${unfollow_data.username}`,
                   alertType: 'alert-success',
                   fillType: 'filled-lm',
                 });
               }
             } else {
               halfmoon.initStickyAlert({
-                title: `Failed! Please Try Again`,
+                content: `Failed! Please try again`,
                 alertType: 'alert-danger',
                 fillType: 'filled-lm',
               });

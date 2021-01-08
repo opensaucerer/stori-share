@@ -27,7 +27,7 @@ def home():
     # defining variables
     form = LoginForm()
     story = Story
-    posts = Story.query.all()
+    posts = Story.query.order_by(Story.date_posted.desc()).all()
     # defining variables end
 
     return render_template('home.html', posts=posts, story=story, form=form, current_year=current_year)
@@ -204,7 +204,8 @@ def dashboard(username):
 
         story = Story
         storylikes = Storylikes
-        posts = Story.query.filter_by(user_id=user.id)
+        posts = Story.query.filter_by(user_id=user.id).order_by(
+            Story.date_posted.desc())
         blog_title = f"@{username} Stories In One View"
         form = ProfileForm()
         login_form = LoginForm()
@@ -278,21 +279,25 @@ def create_story():
     # getting story from json
     data = request.get_json()
 
-    # add new Story to User model
-    new_story = Story(title=data['story_title'], content=data['story_content'],
-                      story_image=data['story_image'], author=current_user)
-    # add new Story to User model end
+    if data:
 
-    # adding new Story to database
-    db.session.add(new_story)
-    db.session.commit()
-    # adding new Story to database end
+        # add new Story to User model
+        new_story = Story(title=data['story_title'], content=data['story_content'],
+                          story_image=data['story_image'], author=current_user)
+        # add new Story to User model end
 
-    # conmputing and returning message
-    message = {"status": "success", "link": "/" +
-               current_user.username + "?status=new-post"}
-    return jsonify(message), 201
-    # computing and returning message end
+        # adding new Story to database
+        db.session.add(new_story)
+        db.session.commit()
+        # adding new Story to database end
+
+        # conmputing and returning message
+        message = {"status": "success", "link": "/" +
+                   current_user.username + "?status=new-post"}
+        return jsonify(message), 201
+        # computing and returning message end
+    else:
+        raise RequestError('failed')
 
 
 def allowed_file(filename):

@@ -7,8 +7,6 @@ const title = document.querySelector('#title');
 const fb = document.querySelector('#fb');
 const fg = document.querySelector('#fg');
 const finput = document.querySelector('#file-input-6');
-const fmsg = document.querySelector('.alert');
-const msg = document.querySelector('.alert-heading');
 const btn = document.querySelector('#submit');
 const spin = document.querySelector('button i.fa');
 
@@ -90,32 +88,38 @@ btn.onclick = async function (event) {
           if (storyData.status == 'success') {
             window.location.href = storyData.link;
           } else {
-            fmsg.className = 'alert alert-danger';
-            fmsg.style.display = '';
-            msg.innerText = "Your Story Wasn't Published. Please Try Again";
+            halfmoon.initStickyAlert({
+              content: "Your story wasn't published. Please try again",
+              alertType: 'alert-danger',
+              fillType: 'filled-lm',
+            });
             spin.className = 'fa';
             btn.innerText = `Publish`;
           }
         } else {
-          // console.log("failed to send");
-          fmsg.className = 'alert alert-danger';
-          fmsg.style.display = '';
-          msg.innerText = "Your Story Wasn't Published. Please Try Again";
+          halfmoon.initStickyAlert({
+            content: "Your story wasn't published. Please try again",
+            alertType: 'alert-danger',
+            fillType: 'filled-lm',
+          });
           spin.className = 'fa';
           btn.innerText = `Publish`;
         }
       } else {
-        fmsg.className = 'alert alert-danger';
-        fmsg.style.display = '';
-        msg.innerText = 'Image Upload Failed. Please Check File And Try Again';
+        halfmoon.initStickyAlert({
+          content: 'Image upload failed. Check file and try again',
+          alertType: 'alert-danger',
+          fillType: 'filled-lm',
+        });
         spin.className = 'fa';
         btn.innerText = `Publish`;
       }
     } else {
-      // console.log("failed to send");
-      fmsg.className = 'alert alert-danger';
-      fmsg.style.display = '';
-      msg.innerText = 'Image Upload Failed. Please Check File And Try Again';
+      halfmoon.initStickyAlert({
+        content: 'Image upload failed. Check file and try again',
+        alertType: 'alert-danger',
+        fillType: 'filled-lm',
+      });
       spin.className = 'fa';
       btn.innerText = `Publish`;
     }
