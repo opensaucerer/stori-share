@@ -37,7 +37,7 @@ class User(db.Model, UserMixin):
     profile_bg = db.Column(
         db.String(20), nullable=False)
     likes_count = db.Column(db.Integer, nullable=False, default=0)
-    about = db.Column(db.String, nullable=False, default=about)
+    about = db.Column(db.String(130), nullable=False, default=about)
     stories = db.relationship('Story', backref='author', lazy=True)
     liked = db.relationship(
         'Storylikes',
@@ -49,12 +49,20 @@ class User(db.Model, UserMixin):
         secondaryjoin=(followers.c.followed_id == id),
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
+    # defining unit testing functions
     def set_password(self, password):
         return bcrypt.generate_password_hash(
             password).decode('utf-8')
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
+    # defining unit testing functions end
+
+    def get_followers(self):
+        return self.followers.all()
+
+    def get_following(self):
+        return self.followed.all()
 
     # method to like and unlike stories and check if user has liked a story
     def like_story(self, story):

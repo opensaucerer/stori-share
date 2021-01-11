@@ -77,7 +77,8 @@ class ProfileForm(FlaskForm):
         'autocomplete': 'username'})
     email = StringField("Email", validators=[DataRequired(), Email()], render_kw={
         'autocomplete': 'username'})
-    about = TextAreaField("About")
+    about = TextAreaField("About", validators=[
+        DataRequired(), Length(min=2, max=130, message="Let others know a little about you")])
     profile_pic = FileField('Profile Picture', validators=[
                             FileAllowed(['png', 'jpg', 'jpeg'], message="You can only upload image files with png, jpg, jpeg")], render_kw={
                                 'for': 'profile_pic'})

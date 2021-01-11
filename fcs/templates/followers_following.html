@@ -1,0 +1,123 @@
+<!-- Including the preset html file -->
+{% extends "preset.html" %}
+<!-- Including the preset html file end -->
+
+<!-- Block content Overwrite -->
+{% block content %}
+
+<style>
+  @media screen and (min-width: 700px) {
+    main {
+      margin-left: 10rem;
+      margin-right: 10rem;
+    }
+  }
+
+  @media screen and (max-width: 500px) {
+    .about {
+      display: none;
+    }
+    .follow {
+      margin-left: 75% !important;
+      margin-top: -3rem !important;
+    }
+  }
+
+  @media screen and (min-width: 770px) {
+  }
+
+  .img-fluid {
+    border-radius: 50% !important;
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .about {
+    padding: 0 2rem 0 5rem;
+    position: relative !important;
+    top: 0 !important;
+  }
+
+  .follow {
+    position: relative !important;
+    right: 0 !important;
+    margin-left: 85%;
+    margin-top: -4rem;
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+  }
+</style>
+
+{% if not followers %}
+
+<section class="text-center">
+  <div class="container">
+    <h1 class="text-muted">
+      Seems {% if current_user.username == user.username %}
+      <a
+        href="{{ url_for('dashboard', username=user.username) }}"
+        class="link-nohover"
+        >you</a
+      >
+      prefer {% else %}
+      <a
+        href="{{ url_for('dashboard', username=user.username) }}"
+        class="link-nohover"
+        >@{{user.username}}</a
+      >
+      prefers {% endif %} to sail across the ocean without touching the waters
+    </h1>
+  </div>
+</section>
+{% else %}
+
+<main>
+  {% for follower in followers %}
+  <div class="card" style="padding: 1rem">
+    <a
+      href="{{ url_for('dashboard', username=follower.username) }}"
+      class="nav-link user"
+      style="width: fit-content"
+    >
+      <img
+        src="{{ url_for('static', filename='img/profile_pic/' + follower.profile_pic) }}"
+        class="img-fluid"
+        alt="Profile Picture"
+        style="border: 1px solid grey; border-radius: 50%"
+      />
+      <small
+        style="
+          color: #1890ff;
+          font-weight: 700;
+          font-size: 1.3rem;
+          letter-spacing: 1px;
+        "
+        class="pl-5"
+        >{{ follower.username }}</small
+      >
+    </a>
+    <p class="about w-350">{{ follower.about }}</p>
+
+    {% if not current_user == follower %} {% if not
+    current_user.is_following(follower) %}
+
+    <div class="follow">
+      <a class="btn btn-primary btn-sm">Follow</a>
+    </div>
+    {% else %}
+
+    <div class="follow">
+      <a class="btn btn-primary btn-sm following">Unfollow</a>
+    </div>
+    {% endif %} {% endif %}
+  </div>
+  {% endfor %} {% endif %}
+</main>
+
+{% endblock content %}
+<!-- Block content Overwrite end -->

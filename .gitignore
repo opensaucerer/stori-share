@@ -3,3 +3,4 @@ venv
 __pycache__
 articles.py
 test.py
+dumps.html

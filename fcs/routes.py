@@ -532,3 +532,33 @@ def follow():
         current_user.unfollow(user_to_follow)
         db.session.commit()
         return jsonify({"message": "success", "username": username, "count": user_to_follow.followers.count()}), 201
+
+
+# followers users route
+@ app.route('/<username>/followers', methods=['GET'])
+@ login_required
+def followers(username):
+
+    # defining variables
+    blog_title = f"See Those Who Love @{username} stories"
+
+    # querying followers from db
+    user = User.query.filter_by(username=username).first()
+    followers = user.get_followers()
+
+    return render_template('followers_following.html', title=blog_title, user=user, followers=followers)
+
+
+# following users route
+@ app.route('/<username>/following', methods=['GET'])
+@ login_required
+def following(username):
+
+    # defining variables
+    blog_title = f"See Creators @{username} Love"
+
+    # querying data from db
+    user = User.query.filter_by(username=username).first()
+    followers = user.get_following()
+
+    return render_template('followers_following.html', title=blog_title, user=user, followers=followers)

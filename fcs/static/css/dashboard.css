@@ -1,20 +1,19 @@
 main {
     margin-left: 10%;
     margin-right: 10%;
-    position: relative;
-    top: -30px;
 }
 
 @media (max-width: 460px) {
-    .card2 {
-        top: -20px !important;
+    .info_con {
+        margin-left: 2rem !important;
     }
-
+ 
 }
 
 .flex-column {
     padding-left: 20px !important;
 }
+
 
 
 @media (max-width: 504px) {
@@ -27,9 +26,6 @@ main {
         height: 230px !important;
     }
 
-    .card1 {
-        height: 230px !important;
-    }
 
     .flex-row {
         width: 160px !important;
@@ -39,12 +35,12 @@ main {
 
     .stories-count,
     .likes-count {
-        font-size: 12px !important;
+        font-size: 1.2rem !important;
     }
 
     .stories,
     .likes {
-        font-size: 12px !important;
+        font-size: 1.2rem !important;
     }
 
     .flex-column {
@@ -60,8 +56,7 @@ main {
     .profile-picture {
         width: 70px !important;
         height: 70px !important;
-        bottom: -44px !important;
-        left: 13px !important;
+       
     }
 
     .justify-content-between {
@@ -83,18 +78,20 @@ main {
     }
 
     .edit {
-        position: absolute !important;
+        position: relative !important;
         right: 18px !important;
         top: 275px !important;
     }
-
+    .info_con {
+        margin-left: 8rem !important;
+    }
 
 
 }
 
 .ca.w-300 {
     position: sticky;
-    top: 10px;
+    top: 2rem;
 }
 
 .align-items-center {
@@ -142,20 +139,13 @@ main {
         top: -38px !important;
     }
 
-    .card2 {
-        top: -20px !important;
-    }
-
+ 
     main {
         margin-left: 0;
         margin-right: 0;
     }
 
     img {
-        height: 230px !important;
-    }
-
-    .card1 {
         height: 230px !important;
     }
 
@@ -170,12 +160,12 @@ main {
 
     .stories-count,
     .likes-count {
-        font-size: 15px !important;
+        font-size: 1.5rem !important;
     }
 
     .stories,
     .likes {
-        font-size: 12px !important;
+        font-size: 1.2rem !important;
     }
 
 
@@ -183,14 +173,46 @@ main {
 
         width: 100px !important;
         height: 100px !important;
-        bottom: -55px !important;
-        left: 30px !important;
+        
     }
 
     .font-size-16 {
         height: 50px !important;
     }
 
+    .info_con {
+        margin-left: 13rem;
+    }
+
+}
+
+.username {
+    position: relative;
+    left: 24%;
+    background: transparent;
+    top: -40px;
+    display: inline;
+    height: fit-content;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 25px;
+    font-weight: 900;
+    color: white !important;
+     -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1.2px;
+    -webkit-text-stroke-color: black;
+    -webkit-text-stroke-weight: 500;
+
+}
+
+@media (max-width: 370px) {
+
+    .info_con {
+        margin-left: 0rem !important;
+    }
+    .username{
+        padding-left: 1rem !important;
+    }
 }
 
 
@@ -200,10 +222,8 @@ main {
     top: 275px;
 }
 
-.follow {
-    position: absolute;
-    right: 15px;
-    top: 275px;
+.info_con{
+    margin-left: 13rem;
 }
 
 .profile-picture {
@@ -211,28 +231,16 @@ main {
     width: 100px;
     height: 100px;
     position: absolute;
-    bottom: -40px;
-    left: 50px;
+    bottom: 4rem;
+    left: 1rem;
     border: 2px solid white;
 
 }
 
+.card{
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
 
-.username {
-    position: relative;
-    left: 24%;
-    background: transparent;
-    top: -40px;
-    display: inline;
-    margin: 0 !important;
-    padding: 0 !important;
-    font-size: 25px;
-    font-weight: 900;
-    color: white !important;
-    /* -webkit-text-fill-color: white;
-    -webkit-text-stroke-width: 1.2px;
-    -webkit-text-stroke-color: black;
-    -webkit-text-stroke-weight: 500; */
 }
 
 
@@ -249,37 +257,10 @@ main {
 .stories-count,
 .likes-count {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 20px;
+    font-size: 2.0rem;
     font-weight: bold;
 }
 
-
-.card1 {
-    height: 250px;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-top-style: none;
-    padding: 0;
-    margin: 0;
-    border: 0 !important;
-    box-sizing: border-box !important;
-    z-index: -2;
-}
-
-.card2 {
-    position: relative;
-    top: -0px !important;
-    background: rgba(255, 255, 255, 0.329);
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-    border-bottom-left-radius: 25px;
-    border-bottom-right-radius: 25px;
-    border-top-style: none;
-
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box !important;
-}
 
 .img-con img {
     height: 230px !important;
@@ -295,5 +276,5 @@ main {
 }
 
 .following{
-    font-weight: bolder;
+    font-weight: inherit;
 }

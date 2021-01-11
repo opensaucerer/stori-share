@@ -198,9 +198,9 @@
           {% if current_user.is_authenticated %}
 
           <li class="nav-item">
-            <a href="{{ url_for('collections') }}" class="nav-link"
-              >Collections</a
-            >
+            <a href="{{ url_for('collections') }}" class="nav-link">
+              Collections
+            </a>
           </li>
           <li class="nav-item active">
             <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
@@ -222,7 +222,7 @@
             <!-- Create New Story -->
             <a
               href="{{ url_for('new_story') }}"
-              style="padding-right: 0.3rem"
+              style="padding-right: 0rem"
               class="nav-link"
             >
               <i
@@ -232,12 +232,29 @@
               ></i>
             </a>
             <!-- Create New Story End-->
+            <!-- Message icon -->
+            <a
+              href="{{ url_for('new_story') }}"
+              style="padding-right: 0.3rem"
+              class="nav-link"
+            >
+              <span
+                class="badge badge-primary badge-pill"
+                style="margin-right: 4px"
+                >6</span
+              >
+              <i
+                class="fa fa-envelope"
+                aria-hidden="true"
+                style="font-size: 18px"
+              ></i>
+            </a>
+            <!-- message icon end -->
             {% endif %}
 
             <!-- Search Icon -->
             <a id="search" class="nav-link">
               <i
-
                 class="fa fa-search"
                 aria-hidden="true"
                 style="font-size: 18px"

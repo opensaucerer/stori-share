@@ -173,6 +173,24 @@
               ></i>
             </a>
             <!-- Create New Story End-->
+            <!-- Message icon -->
+            <a
+              href="{{ url_for('new_story') }}"
+              style="padding-right: 0.3rem"
+              class="nav-link"
+            >
+              <span
+                class="badge badge-primary badge-pill"
+                style="margin-right: 4px"
+                >6</span
+              >
+              <i
+                class="fa fa-envelope"
+                aria-hidden="true"
+                style="font-size: 18px"
+              ></i>
+            </a>
+            <!-- message icon end -->
             {% endif %}
 
             <!-- Search Icon -->
@@ -424,8 +442,15 @@
 
                 <!-- about input -->
                 <div class="form-group">
-                  {{form.about.label(class="form-control-label")}}
-                  {{form.about(class="form-control")}}
+                  {{form.about.label(class="form-control-label")}} {%if
+                  form.about.errors %} {{form.about(class="form-control
+                  is-invalid")}}
+                  <div class="invalid-feedback">
+                    {% for error in form.about.errors %}
+                    <small>{{ error }}</small>
+                    {% endfor %}
+                  </div>
+                  {% else %} {{form.about(class="form-control")}} {% endif %}
                 </div>
 
                 <!-- profile picture input -->
@@ -503,69 +528,134 @@
 
       <!-- Delete Story Modal end -->
 
-      <div class="content-wrapper" style="top: 5rem">
+      <div
+        class="content-wrapper"
+        style="top: 0rem !important; height: 100% !important"
+      >
         <!-- Rendering content to be overwritten -->
 
         <!-- Dashboard Container -->
-        <main role="main">
-          <!-- First comes the modal -->
-
+        <main>
           <!-- Dashboard Background Image and Info Container -->
-          <div class="card card1">
+          <div
+            class="card"
+            style="padding: 0 !important; margin-left: 0; margin-right: 0"
+          >
             <!-- Dashboard profile background image -->
-            <div class="bg-con" style="height: 250px">
+            <div class="bg-con" style="height: 25rem">
               <img
                 style="width: 100%; height: 100% !important; object-fit: cover"
                 src="{{ bg_img }}"
-                class="img-fluid"
-                alt="responsive image"
+                alt="Profile Background"
               />
             </div>
-
             <!-- Dashboard profile background image end-->
 
-            <!-- Username, storeis, likes, and profile_pic container -->
-            <div class="card card2" style="width: 100%; height: 80px">
-              <span class="username">{{ username }}</span>
-              <div class="d-flex flex-row justify-content-around">
-                <div class="d-flex flex-column stories">
-                  <span class="stories-count">{{ post_count }}</span>
-                  <span class="stories-title">STORIES</span>
-                </div>
-
-                <div class="d-flex flex-column likes like">
-                  <span id="likes-count" class="likes-count"
-                    >{{ user.likes_count }}</span
-                  >
-                  <span class="likes-title">LIKES</span>
-                </div>
-                <div class="d-flex flex-column likes">
-                  <span class="likes-count">{{user.followed.count()}}</span>
-                  <span class="likes-title">FOLLOWING</span>
-                </div>
-                <div class="d-flex flex-column likes">
-                  <span id="followers-count" class="likes-count"
-                    >{{user.followers.count()}}</span
-                  >
-                  <span class="likes-title">FOLLOWERS</span>
-                </div>
-              </div>
-            </div>
-            <!-- Username, storeis, likes, and profile_pic container end -->
             <!-- Displaying profile picture -->
-            <div>
-              <img
-                style="background: rgb(73, 71, 71)"
-                src="{{ profile_pic }}"
-                class="profile-picture"
-                alt="Profile Picture"
-              />
-            </div>
+            <img
+              style="background: rgb(73, 71, 71)"
+              src="{{ profile_pic }}"
+              class="profile-picture"
+              alt="Profile Picture"
+            />
+
             <!-- Displaying profile picture end -->
+
+            <!-- storeis, likes, followers, following, and username container -->
+
+            <span class="username">{{ username }}</span>
+            <div class="d-flex info_con">
+              <div class="d-flex flex-column stories">
+                <span class="stories-count">{{ post_count }}</span>
+                <span class="stories-title">STORIES</span>
+              </div>
+
+              <div class="d-flex flex-column likes like">
+                <span id="likes-count" class="likes-count"
+                  >{{ user.likes_count }}</span
+                >
+                <span class="likes-title">LIKES</span>
+              </div>
+              <div class="d-flex flex-column likes">
+                <a
+                  href="{{ url_for('following', username=username) }}"
+                  class="link-nohover"
+                  ><span class="likes-count">{{user.followed.count()}}</span></a
+                >
+                <a
+                  href="{{ url_for('following', username=username) }}"
+                  class="link-nohover"
+                  ><span class="likes-title">FOLLOWING</span></a
+                >
+              </div>
+              <div class="d-flex flex-column likes">
+                <a
+                  href="{{ url_for('followers', username=username) }}"
+                  class="link-nohover"
+                  ><span id="followers-count" class="likes-count"
+                    >{{user.followers.count()}}</span
+                  ></a
+                >
+                <a
+                  href="{{ url_for('followers', username=username) }}"
+                  class="link-nohover"
+                >
+                  <span class="likes-title">FOLLOWERS</span></a
+                >
+              </div>
+
+              <!-- storeis, likes, followers, following, and username container  end -->
+
+              <!-- Edit Profile Using Modal -->
+              {% if current_user.is_authenticated %} {% if current_user.username
+              == username %}
+              <div class="d-flex flex-column likes">
+                <a href="#modal-1" class="btn active btn-sm" role="button">
+                  <i class="fa fa-pen" style="color: #1890ff"></i> Edit
+                </a>
+              </div>
+              <!-- Edit Profile Using Modal end -->
+
+              <!-- follow and message container -->
+              {% elif not current_user.is_following(user) %}
+
+              <div class="d-flex flex-column likes">
+                <a href="" class="likes-count link-nohover"
+                  ><i class="fa fa-envelope"></i
+                ></a>
+                <a href="" class="link-nohover"><span>MESSAGE</span></a>
+              </div>
+              <div class="d-flex flex-column likes follow">
+                <a class="btn btn-primary btn-sm">Follow</a>
+              </div>
+              {% else %}
+
+              <div class="d-flex flex-column likes">
+                <a href="" class="likes-count link-nohover"
+                  ><i class="fa fa-envelope"></i
+                ></a>
+                <a href="" class="link-nohover"><span>MESSAGE</span></a>
+              </div>
+              <div class="d-flex flex-column likes follow">
+                <a class="btn btn-primary btn-sm following">Unfollow</a>
+              </div>
+              {% endif %} {% else %}
+              <div class="d-flex flex-column likes">
+                <a href="" class="likes-count link-nohover"
+                  ><i class="fa fa-envelope"></i
+                ></a>
+                <a href="" class="link-nohover"><span>MESSAGE</span></a>
+              </div>
+              <div class="d-flex flex-column likes follow">
+                <a class="btn btn-primary btn-sm">Follow</a>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- follow and message container end -->
           </div>
 
           <!-- Dashboard Background Image and Info Container end -->
-          <div style="height: 85px"></div>
 
           <div class="d-flex justify-content-between">
             <!-- About Section -->
@@ -580,29 +670,6 @@
               </div>
             </div>
             <!-- About Section End -->
-
-            <!-- Edit Profile Using Modal -->
-            {% if current_user.is_authenticated %} {% if current_user.username
-            == username %}
-            <div class="edit">
-              <a href="#modal-1" class="btn active btn-sm" role="button">
-                <i class="fa fa-pen" style="color: #1890ff"></i> Edit
-              </a>
-            </div>
-            {% elif not current_user.is_following(user) %}
-            <div class="follow">
-              <a class="btn btn-primary btn-sm">Follow</a>
-            </div>
-            {% else %}
-            <div class="follow">
-              <a class="btn btn-primary btn-sm following">Unfollow</a>
-            </div>
-            {% endif %} {% else %}
-            <div class="follow">
-              <a class="btn btn-primary btn-sm">Follow</a>
-            </div>
-            {% endif %}
-            <!-- Edit Profile Using Modal end -->
 
             <!-- Post Section -->
 
