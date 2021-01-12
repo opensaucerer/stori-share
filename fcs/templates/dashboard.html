@@ -815,15 +815,18 @@
       const followers_count = document.querySelector('#followers-count');
       // Getting elements from the DOM end
 
+      //adding event listener to the follow button
       follow.addEventListener('click', async function () {
         if ('{{ current_user.is_authenticated }}' == 'True') {
           follow_icon_class = this.querySelector('a');
-
+          //checking of user is already following the user
           if (follow_icon_class.classList == 'btn btn-primary btn-sm') {
+            //gathering variables
             var follow_data = {
               username: '{{ user.username }}',
               action: 'follow',
             };
+            //sending the request
             const follow_res = await fetch(`/follow`, {
               method: 'POST',
               headers: {
@@ -831,7 +834,7 @@
               },
               body: JSON.stringify(follow_data),
             });
-
+            // checking the response 
             if (follow_res.ok) {
               const follow_data = await follow_res.json();
               console.log(follow_data);
@@ -839,7 +842,9 @@
                 follow_icon_class.classList =
                   'btn btn-primary btn-sm following';
                 follow_icon_class.innerText = 'Unfollow';
+                //updating the count state
                 followers_count.innerText = follow_data.count;
+                //alerting the user on success
                 halfmoon.initStickyAlert({
                   content: `You're now following ${follow_data.username}`,
                   alertType: 'alert-success',
@@ -847,6 +852,7 @@
                 });
               }
             } else {
+              //alerting the user on fail
               halfmoon.initStickyAlert({
                 content: 'Failed! Please try again',
                 alertType: 'alert-danger',
@@ -856,10 +862,12 @@
           } else if (
             follow_icon_class.classList == 'btn btn-primary btn-sm following'
           ) {
+            //defining variables
             var unfollow_data = {
               username: '{{ user.username }}',
               action: 'unfollow',
             };
+            //sending the request
             const unfollow_res = await fetch(`/follow`, {
               method: 'POST',
               headers: {
@@ -868,13 +876,16 @@
               body: JSON.stringify(unfollow_data),
             });
 
+            //checking the response
             if (unfollow_res.ok) {
               const unfollow_data = await unfollow_res.json();
               console.log(unfollow_data);
               if (unfollow_data.message == 'success') {
                 follow_icon_class.classList = 'btn btn-primary btn-sm';
                 follow_icon_class.innerText = 'Follow';
+                //updating the count state
                 followers_count.innerText = unfollow_data.count;
+                //alerting the user on success
                 halfmoon.initStickyAlert({
                   content: `You're no longer following ${unfollow_data.username}`,
                   alertType: 'alert-success',
@@ -882,6 +893,7 @@
                 });
               }
             } else {
+              //alerting the user on fail
               halfmoon.initStickyAlert({
                 content: `Failed! Please try again`,
                 alertType: 'alert-danger',
@@ -890,6 +902,7 @@
             }
           }
         } else {
+          //redirecting user to login
           window.location.href = '#modal-3';
         }
       });
