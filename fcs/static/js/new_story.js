@@ -16,14 +16,36 @@ $(document).ready(function () {
     placeholder: 'Remember, Any Story Can Be Told',
     tabsize: 1,
     height: 200,
+    tabsize: 2,
+    // close prettify Html
+    prettifyHtml: false,
+    lang: 'tr-TR',
+
     toolbar: [
       // [groupName, [list of button]]
       ['style', ['bold', 'italic', 'underline', 'clear']],
       ['font', ['strikethrough', 'superscript', 'subscript']],
       ['para', ['ul', 'ol', 'paragraph']],
       ['insert', ['link']],
+      ['highlight', ['highlight']],
     ],
+    styleTags: ['p', 'h1', 'h2'],
     dialogsFade: true,
+    callbacks: {
+      onPaste: function (e) {
+        console.log('Called event paste');
+        var bufferText = (
+          (e.originalEvent || e).clipboardData || window.clipboardData
+        ).getData('Text');
+
+        e.preventDefault();
+
+        // Firefox fix
+        setTimeout(function () {
+          document.execCommand('insertText', false, bufferText);
+        }, 10);
+      },
+    },
   });
 });
 

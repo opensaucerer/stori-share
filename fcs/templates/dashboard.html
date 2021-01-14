@@ -162,6 +162,9 @@
           <div class="navbar-content ml-auto">
             <!-- Create New Story -->
             <a
+              data-toggle="tooltip"
+              data-title="New Story"
+              data-placement="left"
               href="{{ url_for('new_story') }}"
               style="padding-right: 0.3rem"
               class="nav-link"
@@ -535,7 +538,7 @@
         <!-- Rendering content to be overwritten -->
 
         <!-- Dashboard Container -->
-        <main>
+        <main style="margin-bottom: 5rem">
           <!-- Dashboard Background Image and Info Container -->
           <div
             class="card"
@@ -803,6 +806,55 @@
         </main>
         <!-- Dashboard Container end -->
         <!-- Rending content to be overwritten end -->
+
+        <!-- page footer -->
+
+        <nav
+          class="navbar navbar-fixed-bottom"
+          style="position: fixed; bottom: 0; z-index: 2"
+        >
+          <a
+            style="margin-left: 0.5rem !important"
+            href="{{ url_for('home') }}"
+            class="navbar-brand ml-10 ml-sm-15"
+          >
+            FCS
+          </a>
+
+          <div class="navbar-content ml-auto">
+            <div class="navbar-content ml-auto">
+              <a
+                href="{{ url_for('about') }}"
+                style="margin-right: 0.5rem"
+                class="nav-link"
+              >
+                About
+              </a>
+
+              <a
+                href="https://twitter.com/samperfectinc"
+                style="padding: 0"
+                class="nav-link"
+                target="_blank"
+              >
+                <span style="padding-right: 5px"> Made with</span>
+                <i
+                  class="fa fa-heart"
+                  aria-hidden="true"
+                  style="font-size: 18px"
+                ></i>
+                <span style="padding-left: 5px; padding-right: 5px">by</span>
+                <i
+                  class="fab fa-twitter"
+                  aria-hidden="true"
+                  style="font-size: 18px"
+                ></i>
+                <span style="padding-left: 5px"><b> Samperfect</b></span>
+              </a>
+            </div>
+          </div>
+        </nav>
+        <!-- page footer end -->
       </div>
     </div>
 
@@ -834,7 +886,7 @@
               },
               body: JSON.stringify(follow_data),
             });
-            // checking the response 
+            // checking the response
             if (follow_res.ok) {
               const follow_data = await follow_res.json();
               console.log(follow_data);

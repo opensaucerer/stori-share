@@ -100,6 +100,7 @@
   rel="stylesheet"
 />
 <script src="{{ url_for('static', filename='summernote-0.8.18-dist/summernote-lite.min.js') }}"></script>
+<script src="{{ url_for('static', filename='summernote-0.8.18-dist/summernote-ext-highlight.js') }}"></script>
 
 <!-- importing custom JavaScript -->
 <script src="{{ url_for('static', filename='js/edit_story.js') }}"></script>
@@ -111,16 +112,35 @@
     $('#editor').summernote({
       tabsize: 1,
       height: 200,
+      tabsize: 2,
+      // close prettify Html
+      prettifyHtml: false,
+      lang: 'tr-TR',
+
       toolbar: [
         // [groupName, [list of button]]
         ['style', ['bold', 'italic', 'underline', 'clear']],
         ['font', ['strikethrough', 'superscript', 'subscript']],
         ['para', ['ul', 'ol', 'paragraph']],
         ['insert', ['link']],
+        ['highlight', ['highlight']],
       ],
+      callbacks: {
+        onPaste: function (e) {
+          console.log('Called event paste');
+          var bufferText = (
+            (e.originalEvent || e).clipboardData || window.clipboardData
+          ).getData('Text');
+
+          e.preventDefault();
+
+          // Firefox fix
+          setTimeout(function () {
+            document.execCommand('insertText', false, bufferText);
+          }, 10);
+        },
+      },
     });
-    //content = `{{content | safe }}`;
-    //$('#editor').summernote('pasteHTML', content);
   });
 </script>
 

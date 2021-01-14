@@ -380,11 +380,11 @@ def story(id, title):
     # defining variables
     # posts = Story.query.all()
     id = int(id)
-    content = Story.query.get(id).content
+    story = Story.query.get(id)
     blog_title = Story.query.get(id).title
     # defining variables end
 
-    return render_template('story.html', title=blog_title, content=content)
+    return render_template('story.html', title=blog_title, story=story)
 
 
 # read story route
