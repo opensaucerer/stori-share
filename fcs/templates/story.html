@@ -1,38 +1,6 @@
 <!-- Including the preset html file -->
-{% extends "home_preset.html" %}
+{% extends "story_preset.html" %}
 <!-- Including the preset html file end -->
-
-<!-- block head overwrite -->
-{% block head %}
-
-<!-- Open Graph metadata -->
-<meta property="og:type" content="article" />
-<meta property="og:title" content="{{ story.title }}" />
-<meta
-  property="og:image"
-  content="https://storishare.herokuapp.com{{ url_for('static', filename='img/story_image/' + story.story_image) }}"
-/>
-<meta property="og:description" content="{{ story.title }}" />
-<meta
-  property="og:url"
-  content="https://storishare.herokuapp.com/{{ story.id }}/read"
-/>
-<!-- Twitter metadata -->
-<meta name="twitter:title" content="{{ story.title }}" />
-<meta name="twitter:description" content="{{ story.title }}" />
-<meta
-  name="twitter:image"
-  content="https://storishare.herokuapp.com{{ url_for('static', filename='img/story_image/' + story.story_image) }}"
-/>
-<meta name="twitter:card" content="summary_large_image" />
-
-{% endblock head %}
-<!-- block head overwrite end -->
-
-<!-- Block content Overwrite -->
-{% block content %}
-
-<!-- Custom CSS -->
 
 <link
   rel="stylesheet"
