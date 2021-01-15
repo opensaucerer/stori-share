@@ -382,9 +382,10 @@ def story(id, title):
     id = int(id)
     story = Story.query.get(id)
     blog_title = Story.query.get(id).title
+    form = LoginForm()
     # defining variables end
 
-    return render_template('story.html', title=blog_title, story=story)
+    return render_template('story.html', title=blog_title, story=story, form=form)
 
 
 # read story route

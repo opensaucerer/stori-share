@@ -425,6 +425,66 @@
   });
   // adding click event to each thumb_up icon end
   // lopping through each thumps_up icon end
+
+  //controlling login through modal
+  const submit = document.getElementById('submit');
+  const email = document.getElementById('email');
+  const password = document.getElementById('password');
+  const remember_me = document.getElementById('remember_me');
+  const em = document.querySelector('#em');
+  const pass = document.querySelector('#pass');
+  submit.addEventListener('click', loginUser);
+
+  async function loginUser() {
+    event.preventDefault();
+    submit.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Signing In';
+
+    if (email.value && password.value) {
+      em.innerText = '';
+      pass.innerText = '';
+      InitiateLogin();
+    } else if (!email.value && !password.value) {
+      em.innerText = "Email Can't Be Empty";
+      pass.innerText = "Password Can't Be Empty";
+      submit.innerText = `Sign In`;
+    } else if (!email.value) {
+      em.innerText = "Email Can't Be Empty";
+      pass.innerText = '';
+      submit.innerText = `Sign In`;
+    } else if (!password.value) {
+      em.innerText = '';
+      pass.innerText = "Password Can't Be Empty";
+      submit.innerText = `Sign In`;
+    }
+
+    async function InitiateLogin() {
+      res = await fetch(`${window.location.origin}/signin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email.value,
+          password: password.value,
+          remember_me: remember_me.checked,
+        }),
+      });
+
+      response = await res.json();
+      if (response.message == 'Login Successful') {
+        [goto, _] = window.location.href.split('#modal-2');
+        window.location.href = goto;
+      } else if (response.message == 'Invalid Password') {
+        em.innerText = '';
+        pass.innerText = 'Check Details and Try Again';
+        submit.innerText = `Sign In`;
+      } else {
+        em.innerText = 'Check Details and Try Again';
+        pass.innerText = 'Check Details and Try Again';
+        submit.innerText = `Sign In`;
+      }
+    }
+  }
 </script>
 
 {% endblock content %}
