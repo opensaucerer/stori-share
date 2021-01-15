@@ -2,6 +2,25 @@
 {% extends "home_preset.html" %}
 <!-- Including the preset html file end -->
 
+<!-- block head overwrite -->
+{% block head %}
+
+<!-- Open Graph metadata -->
+<meta data-rh="true" property="og:type" content="article" />
+<meta property="og:title" content="{{ story.title }}" />
+<meta
+  property="og:image"
+  content="https://storishare.herokuapp.com{{ url_for('static', filename='img/story_image/' + story.story_image) }}"
+/>
+<meta property="og:description" content="{{ story.title }}" />
+<meta
+  property="og:url"
+  content="https://storishare.herokuapp.com/{{ story.id }}/read"
+/>
+
+{% endblock head %}
+<!-- block head overwrite end -->
+
 <!-- Block content Overwrite -->
 {% block content %}
 
@@ -242,7 +261,7 @@
                     >
                       <a
                         href=""
-                        onclick="twitterShare()"
+                        onclick="twitterShare(this)"
                         target="_blank"
                         class="dropdown-item"
                       >
@@ -250,7 +269,7 @@
                       >
                       <a
                         href="#"
-                        onclick="facebookShare()"
+                        onclick="facebookShare(this)"
                         target="_blank"
                         class="dropdown-item"
                       >
@@ -258,13 +277,13 @@
                       >
                       <a
                         href="#"
-                        onclick="linkedinShare()"
+                        onclick="linkedinShare(this)"
                         target="_blank"
                         class="dropdown-item"
                       >
                         <i class="fab fa-linkedin"></i> LinkedIn</a
                       >
-                      <div onclick="copyShare()" class="dropdown-item">
+                      <div onclick="copyShare(this)" class="dropdown-item">
                         <i class="fa fa-link"></i> Copy Link
                       </div>
                     </div>
@@ -316,7 +335,10 @@
 
   //Share functions
   function twitterShare(el) {
-    el.href = `https://twitter.com/intent/tweet?text={{story.title}}&url=${window.location.href}`;
+    el.href = `https://twitter.com/intent/tweet?text={{story.title}}&url=https://storishare.herokuapp.com/{{story.id}}/read`;
+  }
+  function linkedinShare(el) {
+    el.href = `https://www.linkedin.com/shareArticle?mini=true&url=https://storishare.herokuapp.com/{{story.id}}/read&title={{story.title}}&summary={{story.title}}`;
   }
 
   // getting elements from the DOM
