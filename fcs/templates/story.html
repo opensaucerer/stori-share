@@ -102,16 +102,31 @@
                         class="dropdown-menu dropdown-menu-right dropdown-menu-right-one"
                         aria-labelledby="dropdown-toggle-btn-1"
                       >
-                        <a href="#" target="_blank" class="dropdown-item">
+                        <a
+                          href=""
+                          onclick="twitterShare(this)"
+                          target="_blank"
+                          class="dropdown-item"
+                        >
                           <i class="fab fa-twitter"></i> Twitter</a
                         >
-                        <a href="#" target="_blank" class="dropdown-item">
+                        <a
+                          href="#"
+                          onclick="facebookShare(this)"
+                          target="_blank"
+                          class="dropdown-item"
+                        >
                           <i class="fab fa-facebook"></i> Facebook</a
                         >
-                        <a href="#" target="_blank" class="dropdown-item">
+                        <a
+                          href="#"
+                          onclick="linkedinShare(this)"
+                          target="_blank"
+                          class="dropdown-item"
+                        >
                           <i class="fab fa-linkedin"></i> LinkedIn</a
                         >
-                        <div class="dropdown-item">
+                        <div onclick="copyShare(this)" class="dropdown-item">
                           <i class="fa fa-link"></i> Copy Link
                         </div>
                       </div>
@@ -225,16 +240,31 @@
                       class="dropdown-menu dropdown-menu-right"
                       aria-labelledby="dropdown-toggle-btn-1"
                     >
-                      <a href="#" target="_blank" class="dropdown-item">
+                      <a
+                        href=""
+                        onclick="twitterShare()"
+                        target="_blank"
+                        class="dropdown-item"
+                      >
                         <i class="fab fa-twitter"></i> Twitter</a
                       >
-                      <a href="#" target="_blank" class="dropdown-item">
+                      <a
+                        href="#"
+                        onclick="facebookShare()"
+                        target="_blank"
+                        class="dropdown-item"
+                      >
                         <i class="fab fa-facebook"></i> Facebook</a
                       >
-                      <a href="#" target="_blank" class="dropdown-item">
+                      <a
+                        href="#"
+                        onclick="linkedinShare()"
+                        target="_blank"
+                        class="dropdown-item"
+                      >
                         <i class="fab fa-linkedin"></i> LinkedIn</a
                       >
-                      <div class="dropdown-item">
+                      <div onclick="copyShare()" class="dropdown-item">
                         <i class="fa fa-link"></i> Copy Link
                       </div>
                     </div>
@@ -283,6 +313,11 @@
   $(document).ready(function () {
     prettyPrint();
   });
+
+  //Share functions
+  function twitterShare(el) {
+    el.href = `https://twitter.com/intent/tweet?text={{story.title}}&url=${window.location.href}`;
+  }
 
   // getting elements from the DOM
   const likes = document.querySelectorAll('.lcon');

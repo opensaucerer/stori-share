@@ -130,7 +130,7 @@
                     <a
                       type="button"
                       class="btn btn-sm btn-outline-secondary"
-                      href="{{ url_for('story', id=post.id, title='-'.join(story.query.get(post.id).title.split(' '))) }}"
+                      href="{{ url_for('story', id=post.id, title=post.title) }}"
                     >
                       Read
                     </a>
