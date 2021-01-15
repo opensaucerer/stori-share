@@ -6,7 +6,7 @@
 {% block head %}
 
 <!-- Open Graph metadata -->
-<meta data-rh="true" property="og:type" content="article" />
+<meta property="og:type" content="article" />
 <meta property="og:title" content="{{ story.title }}" />
 <meta
   property="og:image"
@@ -17,6 +17,14 @@
   property="og:url"
   content="https://storishare.herokuapp.com/{{ story.id }}/read"
 />
+<!-- Twitter metadata -->
+<meta name="twitter:title" content="{{ story.title }}" />
+<meta name="twitter:description" content="{{ story.title }}" />
+<meta
+  name="twitter:image"
+  content="https://storishare.herokuapp.com{{ url_for('static', filename='img/story_image/' + story.story_image) }}"
+/>
+<meta name="twitter:card" content="summary_large_image" />
 
 {% endblock head %}
 <!-- block head overwrite end -->
