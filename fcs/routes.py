@@ -387,15 +387,14 @@ def story(id, title):
     # checking if the story exist
     if story:
         blog_title = Story.query.get(id).title
+        return render_template('story.html', title=blog_title, story=story, form=form)
 
     else:
-        flash("We Couldn't Find That Story")
-        redirect(url_for('home'))
-
-    return render_template('story.html', title=blog_title, story=story, form=form)
+        flash("We Couldn't Find That Story", 'danger')
+        return redirect(url_for('home'))
 
 
-# read story route
+# edit story route
 @ app.route('/edit_story/<id>/edit', methods=["POST", "GET"])
 @ login_required
 def edit_story(id):
