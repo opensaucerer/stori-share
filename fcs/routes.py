@@ -381,9 +381,16 @@ def story(id, title):
     # posts = Story.query.all()
     id = int(id)
     story = Story.query.get(id)
-    blog_title = Story.query.get(id).title
     form = LoginForm()
     # defining variables end
+
+    # checking if the story exist
+    if story:
+        blog_title = Story.query.get(id).title
+
+    else:
+        flash("We Couldn't Find That Story")
+        redirect(url_for('home'))
 
     return render_template('story.html', title=blog_title, story=story, form=form)
 
