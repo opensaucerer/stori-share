@@ -8,6 +8,11 @@
       rel="canonical"
       href="https://storishare.herokuapp.com/{{ story.id }}/read"
     />
+    <meta property="description" content="{{ story.title }}" />
+    <meta
+      name="robots"
+      content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large"
+    />
 
     <!-- Twitter metadata -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -26,7 +31,6 @@
       content="https://storishare.herokuapp.com{{ url_for('static', filename='img/story_image/' + story.story_image) }}"
     />
     <meta property="og:description" content="{{ story.title }}" />
-    <meta property="description" content="{{ story.title }}" />
     <meta property="og:site_name" content="StoriShare" />
     <meta
       property="og:url"

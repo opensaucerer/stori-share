@@ -316,10 +316,10 @@
 
   //Share functions
   function twitterShare(el) {
-    el.href = `https://twitter.com/intent/tweet?text={{story.title}}&url=https://storishare.herokuapp.com/{{story.id}}/read`;
+    el.href = `https://twitter.com/intent/tweet?text={{story.title}}&url=https://storishare.herokuapp.com/stories/{{story.id}}/read`;
   }
   function linkedinShare(el) {
-    el.href = `https://www.linkedin.com/shareArticle?mini=true&url=https://storishare.herokuapp.com/{{story.id}}/read&title={{story.title}}&summary={{story.title}}`;
+    el.href = `https://www.linkedin.com/shareArticle?mini=true&url=https://storishare.herokuapp.com/stories/{{story.id}}/read&title={{story.title}}&summary={{story.title}}`;
   }
 
   // getting elements from the DOM
