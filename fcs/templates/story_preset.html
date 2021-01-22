@@ -9,6 +9,15 @@
       href="https://storishare.herokuapp.com/{{ story.id }}/read"
     />
 
+    <!-- Twitter metadata -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="{{ story.title }}" />
+    <meta name="twitter:description" content="{{ story.title }}" />
+    <meta
+      name="twitter:image"
+      content="https://storishare.herokuapp.com{{ url_for('static', filename='img/story_image/' + story.story_image) }}"
+    />
+
     <!-- Open Graph metadata -->
     <meta property="og:type" content="article" />
     <meta property="og:title" content="{{ story.title }}" />
@@ -23,14 +32,6 @@
       property="og:url"
       content="https://storishare.herokuapp.com/{{ story.id }}/read"
     />
-    <!-- Twitter metadata -->
-    <meta name="twitter:title" content="{{ story.title }}" />
-    <meta name="twitter:description" content="{{ story.title }}" />
-    <meta
-      name="twitter:image"
-      content="https://storishare.herokuapp.com{{ url_for('static', filename='img/story_image/' + story.story_image) }}"
-    />
-    <meta name="twitter:card" content="summary" />
 
     <!-- This will be fired if javascript is disabled in the client's browser-->
     <noscript>
