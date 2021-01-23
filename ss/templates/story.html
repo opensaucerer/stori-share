@@ -220,7 +220,12 @@
 
                 <span class="lspan">{{ story.likes.count() }}</span>
               </div>
-              <div class="ccon" data-toggle="tooltip" data-title="Comments">
+              <div
+                class="ccon"
+                data-toggle="tooltip"
+                data-title="Feedbacks"
+                onclick="halfmoon.toggleSidebar()"
+              >
                 <i class="fa fa-comment"></i>
               </div>
             </div>
@@ -320,6 +325,21 @@
   }
   function linkedinShare(el) {
     el.href = `https://www.linkedin.com/shareArticle?mini=true&url=https://storishare.herokuapp.com/stories/{{story.id}}/read&title={{story.title}}&summary={{story.title}}`;
+  }
+
+  function copyShare() {
+    var link = document.createElement('input');
+    //link.style.display = 'none'
+    link.value = 'https://storishare.herokuapp.com/stories/{{story.id}}/read';
+    document.body.append(link);
+    link.select();
+    link.setSelectionRange(0, 99999);
+    document.execCommand('copy');
+    halfmoon.initStickyAlert({
+      content: 'Link copied',
+      alertType: 'alert-success',
+      fillType: 'filled-lm',
+    });
   }
 
   // getting elements from the DOM

@@ -2,13 +2,13 @@
 import os
 import secrets
 from datetime import datetime
-from flask import Flask, render_template, url_for, redirect, flash, jsonify, request
+from flask import Flask, render_template, url_for, redirect, flash, jsonify, request, send_from_directory
 from werkzeug.utils import secure_filename
-from fcs import app, db, bcrypt
-from fcs.forms import RegistrationForm, LoginForm, StoryForm, ProfileForm
-from fcs.models import User, Story, Collection, Storylikes
-from fcs.exceptions import RequestError
-from fcs.others import generate_url
+from ss import app, db, bcrypt
+from ss.forms import RegistrationForm, LoginForm, StoryForm, ProfileForm
+from ss.models import User, Story, Collection, Storylikes
+from ss.exceptions import RequestError
+from ss.others import generate_url
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_cors import CORS, cross_origin
 # importing required modules end
@@ -18,6 +18,13 @@ from flask_cors import CORS, cross_origin
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 current_year = datetime.now().year
 # defining config variables end
+
+
+# serving sitemap and robots file for webcrawlers
+@app.route('/robots.txt')
+@app.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
 
 
 # stories feed / home route

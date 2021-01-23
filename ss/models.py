@@ -1,6 +1,6 @@
 # importing the required modules
 from datetime import datetime
-from fcs import db, login_manager, bcrypt
+from ss import db, login_manager, bcrypt
 from flask_login import UserMixin
 # importing the required modules end
 
@@ -39,9 +39,14 @@ class User(db.Model, UserMixin):
     likes_count = db.Column(db.Integer, nullable=False, default=0)
     about = db.Column(db.String(130), nullable=False, default=about)
     stories = db.relationship('Story', backref='author', lazy=True)
+    comment = db.relationship('Comment', backref='author', lazy=True)
     liked = db.relationship(
         'Storylikes',
         foreign_keys='Storylikes.user_id',
+        backref='user', lazy='dynamic')
+    comment_liked = db.relationship(
+        'Commentlikes',
+        foreign_keys='Commentlikes.user_id',
         backref='user', lazy='dynamic')
     followed = db.relationship(
         'User', secondary=followers,
@@ -135,6 +140,8 @@ class Story(db.Model):
         db.Integer, db.ForeignKey('user.id'), nullable=False)
     collections = db.relationship(
         'Collection', backref='story', cascade="all,delete", lazy=True)
+    comments = db.relationship(
+        'Comment', backref='story', cascade="all,delete", lazy=True)
     likes = db.relationship(
         'Storylikes', backref='story', cascade="all,delete", lazy='dynamic')
 
@@ -166,3 +173,31 @@ class Collection(db.Model):
     def __repr__(self):
         return f"Collection('{self.collection_id}', '{self.user_id}')"
 # defining the Collections class (Model) end
+
+
+# defining the Comment class (Model)
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    date_posted = db.Column(db.DateTime, index=True, nullable=False,
+                            default=datetime.utcnow)
+    user_id = db.Column(
+        db.Integer, db.ForeignKey('user.id'), nullable=False)
+    story_id = db.Column(
+        db.Integer, db.ForeignKey('story.id'), nullable=False)
+    likes = db.relationship(
+        'Commentlikes', backref='comment', cascade="all,delete", lazy='dynamic')
+
+# defining the representation state of the Comment class (Model)
+    def __repr__(self):
+        return f"Story('{self.content}', '{self.story}', '{self.author}', '{self.likes}')"
+# defining the COmment class (Model) end
+
+
+# defining the storylikes (Model)
+class Commentlikes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    comment_id = db.Column(
+        db.Integer, db.ForeignKey('comment.id'), nullable=False)
+# defining the storylikes (Model) end

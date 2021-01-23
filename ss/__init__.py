@@ -25,5 +25,5 @@ login_manager.login_message = 'Please Log In to Access That Page'
 # Instantiatig the App and other classes end
 
 # importing below to avoid circular import
-from fcs import routes
+from ss import routes
 # importing below to avoid circular import end

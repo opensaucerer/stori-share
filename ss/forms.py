@@ -4,7 +4,7 @@ from flask_wtf.file import FileField, FileAllowed
 from flask_ckeditor import CKEditorField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, Regexp
-from fcs.models import User
+from ss.models import User
 from flask_login import current_user
 # importing the required modules end
 

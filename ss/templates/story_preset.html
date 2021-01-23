@@ -4,9 +4,38 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- block for meta data -->
-    {% block head %} {% endblock head %}
-    <!-- block for meta data -->
+    <link
+      rel="canonical"
+      href="https://storishare.herokuapp.com/{{ story.id }}/read"
+    />
+    <meta property="description" content="{{ story.title }}" />
+    <meta
+      name="robots"
+      content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large"
+    />
+
+    <!-- Twitter metadata -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ story.title }}" />
+    <meta name="twitter:description" content="{{ story.title }}" />
+    <meta
+      name="twitter:image"
+      content="https://storishare.herokuapp.com{{ url_for('static', filename='img/story_image/' + story.story_image) }}"
+    />
+
+    <!-- Open Graph metadata -->
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="{{ story.title }}" />
+    <meta
+      property="og:image"
+      content="https://storishare.herokuapp.com{{ url_for('static', filename='img/story_image/' + story.story_image) }}"
+    />
+    <meta property="og:description" content="{{ story.title }}" />
+    <meta property="og:site_name" content="StoriShare" />
+    <meta
+      property="og:url"
+      content="https://storishare.herokuapp.com/{{ story.id }}/read"
+    />
 
     <!-- This will be fired if javascript is disabled in the client's browser-->
     <noscript>
@@ -145,7 +174,12 @@
     <!-- Login Modal End -->
 
     <!-- Page wrapper start -->
-    <div id="page-wrapper" class="page-wrapper with-navbar">
+    <div
+      id="page-wrapper"
+      class="page-wrapper with-navbar with-sidebar with-transitions"
+      data-sidebar-hidden="hidden"
+      data-sidebar-type="overlayed-sm-and-down"
+    >
       <!-- rendering sticky alerts start -->
       <div class="sticky-alerts">
         <!-- Collecting flashed messages -->
@@ -398,6 +432,50 @@
       </nav>
       <!-- Navbar end -->
 
+      <!-- Sidebar Start -->
+      <div class="sidebar-overlay" onclick="halfmoon.toggleSidebar()"></div>
+      <div class="sidebar" id="sidebar">
+        <div class="sidebar-menu">
+          <!-- Sidebar brand -->
+          <h4 href="#" class="sidebar-brand">Feedbacks</h4>
+          <!-- Sidebar content with the input box -->
+          <div class="sidebar-content">
+            <textarea
+              type="text"
+              class="form-control"
+              placeholder="Voice your thoughts"
+              style="resize: none"
+            ></textarea>
+          </div>
+          <div class="text-right" style="margin-right: 2.5rem">
+            <input class="btn btn-primary" type="submit" value="Feedback" />
+          </div>
+          <!-- Sidebar links and titles -->
+          <div class="sidebar-divider"></div>
+          <a href="#" class="sidebar-link active">Installation</a>
+          <a href="#" class="sidebar-link">CLI commands</a>
+          <br />
+          <h5 class="sidebar-title">Components</h5>
+          <div class="sidebar-divider"></div>
+          <a href="#" class="sidebar-link">File explorer</a>
+          <a href="#" class="sidebar-link">Spreadsheet</a>
+          <a href="#" class="sidebar-link">Map</a>
+          <a href="#" class="sidebar-link">Messenger</a>
+          <h5 class="sidebar-title">Getting started</h5>
+          <div class="sidebar-divider"></div>
+          <a href="#" class="sidebar-link active">Installation</a>
+          <a href="#" class="sidebar-link">CLI commands</a>
+          <br />
+          <h5 class="sidebar-title">Components</h5>
+          <div class="sidebar-divider"></div>
+          <a href="#" class="sidebar-link">File explorer</a>
+          <a href="#" class="sidebar-link">Spreadsheet</a>
+          <a href="#" class="sidebar-link">Map</a>
+          <a href="#" class="sidebar-link">Messenger</a>
+        </div>
+      </div>
+      <!-- Sidebar End -->
+
       <div class="content-wrapper" style="top: 5rem">
         <div style="margin-bottom: 5rem">
           <!-- Rending content to be overwritten -->
@@ -419,35 +497,31 @@
             FCS
           </a>
 
+          <a
+            href="{{ url_for('about') }}"
+            style="margin-left: 1.5rem; padding: 0"
+            class="nav-link"
+            class="navbar-brand ml-10 ml-sm-15"
+          >
+            About
+          </a>
+
           <div class="navbar-content ml-auto">
             <div class="navbar-content ml-auto">
-              <a
-                href="{{ url_for('about') }}"
-                style="margin-right: 0.5rem"
-                class="nav-link"
-              >
-                About
-              </a>
-
               <a
                 href="https://twitter.com/samperfectinc"
                 style="padding: 0"
                 class="nav-link"
                 target="_blank"
               >
-                <span style="padding-right: 5px"> Made with</span>
-                <i
-                  class="fa fa-heart"
-                  aria-hidden="true"
-                  style="font-size: 18px"
-                ></i>
-                <span style="padding-left: 5px; padding-right: 5px">by</span>
+                <span style="padding-right: 5px"> Made by</span>
+
+                <span style="padding-right: 5px"><b> Samperfect</b></span>
                 <i
                   class="fab fa-twitter"
                   aria-hidden="true"
                   style="font-size: 18px"
                 ></i>
-                <span style="padding-left: 5px"><b> Samperfect</b></span>
               </a>
             </div>
           </div>

@@ -1,5 +1,5 @@
 # importing required modules
-from fcs import app
+from ss import app
 # importing required modules end
 
 # running the app

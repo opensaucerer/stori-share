@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from fcs import app
+from ss import app
 
 
 class RequestError(Exception):
