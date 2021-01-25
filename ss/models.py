@@ -89,6 +89,26 @@ class User(db.Model, UserMixin):
             Storylikes.story_id == story.id).count() > 0
     # method to like and unlike stories and check if user has liked a story end
 
+    # method to like and unlike comments and check if user has liked a comment
+    def like_comment(self, comment):
+        if not self.has_liked_comment(comment):
+            like = Commentlikes(user_id=self.id, comment_id=comment.id)
+            # story.author.likes_count += 1
+            db.session.add(like)
+
+    def unlike_comment(self, comment):
+        if self.has_liked_comment(comment):
+            Commentlikes.query.filter_by(
+                user_id=self.id,
+                comment_id=comment.id).delete()
+            # story.author.likes_count -= 1
+
+    def has_liked_comment(self, comment):
+        return Commentlikes.query.filter(
+            Commentlikes.user_id == self.id,
+            Commentlikes.comment_id == comment.id).count() > 0
+    # method to like and unlike comment and check if user has liked a comment end
+
     # method to check if user has bookmarked a story
     def has_bookmarked_story(self, story):
         return Collection.query.filter(

@@ -255,9 +255,9 @@
         <!-- Changing nav item based on user session (show {logout} if user is {signed in}) end -->
 
         <div class="navbar-content ml-auto">
-          {% if current_user.is_authenticated %}
           <div class="navbar-content ml-auto">
             <!-- Create New Story -->
+            {% if current_user.is_authenticated %}
             <a
               data-toggle="tooltip"
               data-title="New Story"
@@ -439,6 +439,7 @@
           <!-- Sidebar brand -->
           <h4 href="#" class="sidebar-brand">Feedbacks</h4>
           <!-- Sidebar content with the input box -->
+          {% if current_user.is_authenticated %}
           <div class="sidebar-content">
             <textarea
               type="text"
@@ -450,16 +451,73 @@
           <div class="text-right" style="margin-right: 2.5rem">
             <input class="btn btn-primary" type="submit" value="Feedback" />
           </div>
+          {% else %}
+          <a href="#modal-2" class="sidebar-content active nav-link">
+            Sign In To Share Your Feedbacks
+          </a>
+
+          {% endif %}
           <!-- Sidebar links and titles -->
           <div class="sidebar-divider"></div>
-          {% for comment in comments %}
-          <a href="#" class="sidebar-link active"
-            >{{ comment.author.username }}</a
+          {% if comments.count() == 0 %}
+          <div class="sidebar-link font-weight-bold text-center">
+            Be The First To Voice Your Thoughts
+          </div>
+
+          {% else %} {% for comment in comments %}
+          <a
+            href="{{ url_for('dashboard', username=comment.author.username) }}"
+            class="nav-link user"
+            style="width: fit-content"
           >
-          <p href="#" class="sidebar-link">{{ comment.content }}</p>
+            <img
+              src="{{ url_for('static', filename='img/profile_pic/' + comment.author.profile_pic) }}"
+              class="img-fluid"
+              alt="Profile Picture"
+              style="border: 1px solid grey; border-radius: 50%"
+            />
+            <small
+              style="
+                color: #1890ff;
+                font-weight: 700;
+                font-size: 1.3rem;
+                letter-spacing: 1px;
+              "
+              class="pl-5"
+              >{{ comment.author.username }}</small
+            >
+          </a>
+
+          <p class="sidebar-link">{{ comment.content }}</p>
+          <div class="sidebar-link">
+            <div class="d-flex justify-content-between align-items-center">
+              <div id="lcon">
+                {% if current_user.is_authenticated %} {% if
+                current_user.has_liked_comment(comment) %}
+                <i
+                  id="story-id"
+                  data-storyid="{{ comment.id }}"
+                  class="fa fa-heart clicked"
+                ></i>
+                {% else %}
+                <i
+                  id="story-id"
+                  data-storyid="{{ comment.id }}"
+                  class="fa fa-heart"
+                ></i>
+                {% endif %}
+
+                <span class="lspan">{{ comment.likes.count() }}</span>
+
+                {% endif %}
+              </div>
+
+              <div class="btn-group"></div>
+            </div>
+          </div>
 
           <div class="sidebar-divider"></div>
-          {% endfor %}
+          {% endfor %} {% endif %}
         </div>
       </div>
       <!-- Sidebar End -->

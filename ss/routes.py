@@ -578,3 +578,34 @@ def following(username):
     followers = user.get_following()
 
     return render_template('followers_following.html', title=blog_title, user=user, followers=followers)
+
+
+# Like Story route
+@ app.route('/comments/like/<comment_id>/<action>', methods=["POST", "GET"])
+@ login_required
+def add_comment_like(comment_id, action):
+    # getting story from db
+    comment = Comment.query.get(comment_id)
+
+    # checking if story exists
+    if comment:
+        if action == 'like':
+            # adding like to db
+            current_user.like_comment(comment)
+            new_likes = comment.likes.count()
+            db.session.commit()
+            # adding new like end
+            message = {"count": new_likes, "status": "success"}
+            db.session.commit()
+            return jsonify(message), 201
+
+        if action == 'unlike':
+            current_user.unlike_comment(comment)
+            new_likes = comment.likes.count()
+            message = {"count": new_likes, "status": "success"}
+            db.session.commit()
+            return jsonify(message), 201
+
+    else:
+        message = {"status": "failed"}
+        return jsonify(message), 400
