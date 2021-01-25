@@ -452,26 +452,14 @@
           </div>
           <!-- Sidebar links and titles -->
           <div class="sidebar-divider"></div>
-          <a href="#" class="sidebar-link active">Installation</a>
-          <a href="#" class="sidebar-link">CLI commands</a>
-          <br />
-          <h5 class="sidebar-title">Components</h5>
+          {% for comment in comments %}
+          <a href="#" class="sidebar-link active"
+            >{{ comment.author.username }}</a
+          >
+          <p href="#" class="sidebar-link">{{ comment.content }}</p>
+
           <div class="sidebar-divider"></div>
-          <a href="#" class="sidebar-link">File explorer</a>
-          <a href="#" class="sidebar-link">Spreadsheet</a>
-          <a href="#" class="sidebar-link">Map</a>
-          <a href="#" class="sidebar-link">Messenger</a>
-          <h5 class="sidebar-title">Getting started</h5>
-          <div class="sidebar-divider"></div>
-          <a href="#" class="sidebar-link active">Installation</a>
-          <a href="#" class="sidebar-link">CLI commands</a>
-          <br />
-          <h5 class="sidebar-title">Components</h5>
-          <div class="sidebar-divider"></div>
-          <a href="#" class="sidebar-link">File explorer</a>
-          <a href="#" class="sidebar-link">Spreadsheet</a>
-          <a href="#" class="sidebar-link">Map</a>
-          <a href="#" class="sidebar-link">Messenger</a>
+          {% endfor %}
         </div>
       </div>
       <!-- Sidebar End -->

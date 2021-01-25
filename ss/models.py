@@ -190,7 +190,7 @@ class Comment(db.Model):
 
 # defining the representation state of the Comment class (Model)
     def __repr__(self):
-        return f"Story('{self.content}', '{self.story}', '{self.author}', '{self.likes}')"
+        return f"Comment('{self.content}', '{self.story}', '{self.author}', '{self.likes}')"
 # defining the COmment class (Model) end
 
 

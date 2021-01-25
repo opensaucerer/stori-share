@@ -6,7 +6,7 @@ from flask import Flask, render_template, url_for, redirect, flash, jsonify, req
 from werkzeug.utils import secure_filename
 from ss import app, db, bcrypt
 from ss.forms import RegistrationForm, LoginForm, StoryForm, ProfileForm
-from ss.models import User, Story, Collection, Storylikes
+from ss.models import User, Story, Collection, Storylikes, Comment, Commentlikes
 from ss.exceptions import RequestError
 from ss.others import generate_url
 from flask_login import login_user, current_user, logout_user, login_required
@@ -211,7 +211,7 @@ def dashboard(username):
 
         story = Story
         storylikes = Storylikes
-        posts = Story.query.filter_by(user_id=user.id).order_by(
+        posts = Story.query.filter_by(author=user).order_by(
             Story.date_posted.desc())
         blog_title = f"@{username} Stories In One View"
         form = ProfileForm()
@@ -394,7 +394,9 @@ def story(id, title):
     # checking if the story exist
     if story:
         blog_title = Story.query.get(id).title
-        return render_template('story.html', title=blog_title, story=story, form=form)
+        comments = Comment.query.filter_by(story=story).order_by(
+            Comment.date_posted.desc())
+        return render_template('story.html', title=blog_title, story=story, form=form, comments=comments)
 
     else:
         flash("We Couldn't Find That Story", 'danger')
