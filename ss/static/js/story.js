@@ -111,6 +111,13 @@ fbtn.onclick = async function () {
             <div class="sidebar-link">
             <div class="d-flex justify-content-between align-items-center">
                 <div >
+                 <div
+                    data-toggle="tooltip"
+                    data-title="You can't heart your feedback"
+                  >
+                    <i class="fa fa-heart" style="opacity: 0.5"></i>
+                    <span class="lspan">0</span>
+                  </div>
                   </div>
                   
                   <div class="btn-group">

@@ -523,7 +523,13 @@
                     <span class="lspan">{{ comment.likes.count() }}</span>
                   </div>
                   {% else %}
-                  <div></div>
+                  <div
+                    data-toggle="tooltip"
+                    data-title="You can't heart your feedback"
+                  >
+                    <i class="fa fa-heart" style="opacity: 0.5"></i>
+                    <span class="lspan">{{ comment.likes.count() }}</span>
+                  </div>
                   {% endif %}
 
                   <div class="btn-group">
