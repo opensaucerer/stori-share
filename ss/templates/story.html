@@ -358,7 +358,6 @@
           async function modCollections() {
             res = await fetch(`/collections/${cid.dataset.storyid}/remove`);
             data = await res.json();
-            console.log(data, res.status);
 
             if (data.message == 'success') {
               collections.forEach((collection) => {
@@ -378,7 +377,6 @@
           async function modCollections() {
             res = await fetch(`/collections/${cid.dataset.storyid}/add`);
             data = await res.json();
-            console.log(data, res.status);
 
             if (data.message == 'success') {
               collections.forEach((collection) => {
@@ -405,6 +403,7 @@
   // lopping through each thumps_up icon
   likes.forEach((like) => {
     //getting story-id element
+
     const lid = like.querySelector('#story-id');
     // adding click event to each thumb_up icon
     lid.addEventListener('click', function () {
@@ -415,7 +414,6 @@
             async function addLikes() {
               res = await fetch(`/stories/like/${lid.dataset.storyid}/unlike`);
               data = await res.json();
-              console.log(data, res.status);
 
               if (data.status == 'success') {
                 like.querySelector('.lspan').innerText = data.count;
@@ -428,7 +426,6 @@
             async function addLikes() {
               res = await fetch(`/stories/like/${lid.dataset.storyid}/like`);
               data = await res.json();
-              console.log(data, res.status);
 
               if (data.status == 'success') {
                 like.querySelector('.lspan').innerText = data.count;

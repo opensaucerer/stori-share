@@ -447,9 +447,15 @@
               placeholder="Voice your thoughts"
               style="resize: none"
             ></textarea>
+            <small id="error" class="invalid-feedback"></small>
           </div>
           <div class="text-right" style="margin-right: 2.5rem">
-            <input class="btn btn-primary" type="submit" value="Feedback" />
+            <input
+              id="feedback"
+              class="btn btn-primary"
+              type="submit"
+              value="Feedback"
+            />
           </div>
           {% else %}
           <a href="#modal-2" class="sidebar-content active nav-link">
@@ -460,64 +466,77 @@
           <!-- Sidebar links and titles -->
           <div class="sidebar-divider"></div>
           {% if comments.count() == 0 %}
-          <div class="sidebar-link font-weight-bold text-center">
-            Be The First To Voice Your Thoughts
-          </div>
-
-          {% else %} {% for comment in comments %}
-          <a
-            href="{{ url_for('dashboard', username=comment.author.username) }}"
-            class="nav-link user"
-            style="width: fit-content"
-          >
-            <img
-              src="{{ url_for('static', filename='img/profile_pic/' + comment.author.profile_pic) }}"
-              class="img-fluid"
-              alt="Profile Picture"
-              style="border: 1px solid grey; border-radius: 50%"
-            />
-            <small
-              style="
-                color: #1890ff;
-                font-weight: 700;
-                font-size: 1.3rem;
-                letter-spacing: 1px;
-              "
-              class="pl-5"
-              >{{ comment.author.username }}</small
-            >
-          </a>
-
-          <p class="sidebar-link">{{ comment.content }}</p>
-          <div class="sidebar-link">
-            <div class="d-flex justify-content-between align-items-center">
-              <div id="lcon">
-                {% if current_user.is_authenticated %} {% if
-                current_user.has_liked_comment(comment) %}
-                <i
-                  id="story-id"
-                  data-storyid="{{ comment.id }}"
-                  class="fa fa-heart clicked"
-                ></i>
-                {% else %}
-                <i
-                  id="story-id"
-                  data-storyid="{{ comment.id }}"
-                  class="fa fa-heart"
-                ></i>
-                {% endif %}
-
-                <span class="lspan">{{ comment.likes.count() }}</span>
-
-                {% endif %}
-              </div>
-
-              <div class="btn-group"></div>
+          <div class="no_feedback_container"></div>
+          <div class="no_feedback_message">
+            <div class="sidebar-link font-weight-bold text-center">
+              Be The First To Voice Your Thoughts
             </div>
           </div>
 
-          <div class="sidebar-divider"></div>
-          {% endfor %} {% endif %}
+          {% else %}
+          <div class="feedback_container">
+            {% for comment in comments %}
+            <div class="feedback">
+              <a
+                href="{{ url_for('dashboard', username=comment.author.username) }}"
+                class="nav-link user"
+                style="width: fit-content"
+              >
+                <img
+                  src="{{ url_for('static', filename='img/profile_pic/' + comment.author.profile_pic) }}"
+                  class="img-fluid"
+                  alt="Profile Picture"
+                  style="border: 1px solid grey; border-radius: 50%"
+                />
+                <small
+                  style="
+                    color: #1890ff;
+                    font-weight: 700;
+                    font-size: 1.3rem;
+                    letter-spacing: 1px;
+                  "
+                  class="pl-5"
+                  >{{ comment.author.username }}</small
+                >
+              </a>
+
+              <p class="sidebar-link">{{ comment.content }}</p>
+              <div class="sidebar-link">
+                <div class="d-flex justify-content-between align-items-center">
+                  {% if current_user.is_authenticated and current_user !=
+                  comment.author %}
+                  <div id="lcon">
+                    {% if current_user.has_liked_comment(comment) %}
+                    <i
+                      id="story-id"
+                      data-storyid="{{ comment.id }}"
+                      class="fa fa-heart clicked"
+                    ></i>
+                    {% else %}
+                    <i
+                      id="story-id"
+                      data-storyid="{{ comment.id }}"
+                      class="fa fa-heart"
+                    ></i>
+                    {% endif %}
+
+                    <span class="lspan">{{ comment.likes.count() }}</span>
+                  </div>
+                  {% else %}
+                  <div></div>
+                  {% endif %}
+
+                  <div class="btn-group">
+                    {{ timeago.format(comment.date_posted, datetime.utcnow()) }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="sidebar-divider"></div>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
         </div>
       </div>
       <!-- Sidebar End -->

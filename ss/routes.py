@@ -1,6 +1,7 @@
 # importing requiered modules
 import os
 import secrets
+import timeago
 from datetime import datetime
 from flask import Flask, render_template, url_for, redirect, flash, jsonify, request, send_from_directory
 from werkzeug.utils import secure_filename
@@ -396,7 +397,8 @@ def story(id, title):
         blog_title = Story.query.get(id).title
         comments = Comment.query.filter_by(story=story).order_by(
             Comment.date_posted.desc())
-        return render_template('story.html', title=blog_title, story=story, form=form, comments=comments)
+
+        return render_template('story.html', title=blog_title, story=story, form=form, comments=comments, timeago=timeago, datetime=datetime)
 
     else:
         flash("We Couldn't Find That Story", 'danger')
@@ -580,7 +582,7 @@ def following(username):
     return render_template('followers_following.html', title=blog_title, user=user, followers=followers)
 
 
-# Like Story route
+# Like Comment route
 @ app.route('/comments/like/<comment_id>/<action>', methods=["POST", "GET"])
 @ login_required
 def add_comment_like(comment_id, action):
@@ -609,3 +611,25 @@ def add_comment_like(comment_id, action):
     else:
         message = {"status": "failed"}
         return jsonify(message), 400
+
+
+# Comment route
+@ app.route('/comments/add', methods=["POST"])
+@ login_required
+def comment():
+    data = request.get_json()
+
+    content = data['content']
+    story_id = data['story_id']
+    story = Story.query.get(story_id)
+
+    if data and story:
+        new_comment = Comment(
+            content=content, author=current_user, story=story)
+        db.session.add(new_comment)
+        db.session.commit()
+        message = {"message": "success", "data": {
+            "author": current_user.username, "img": current_user.profile_pic, "content": content}}
+        return jsonify(message)
+    else:
+        raise RequestError('failed')
