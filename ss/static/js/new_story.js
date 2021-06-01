@@ -148,7 +148,7 @@ btn.onclick = async function (event) {
   }
 };
 
-var _validFileExtensions = ['.jpg', '.jpeg', '.png'];
+var _validFileExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
 function ValidateSingleInput(oInput) {
   if (oInput.type == 'file') {
     var sFileName = oInput.value;

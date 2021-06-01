@@ -16,7 +16,7 @@ from flask_cors import CORS, cross_origin
 
 
 # defining config variables
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 current_year = datetime.now().year
 # defining config variables end
 
