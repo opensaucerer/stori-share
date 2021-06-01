@@ -1,5 +1,7 @@
 # importing required modules
 from ss import app
+from dotenv import load_dotenv
+load_dotenv()
 # importing required modules end
 
 # running the app

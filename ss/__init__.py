@@ -6,13 +6,15 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 from flask_cors import CORS, cross_origin
 from flask_migrate import Migrate
+import os
 # importing the required modules end
 
 
 # Instantiatig the App and other classes
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "b8acd37382011732dc7b2ecadf6497a7"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('TEST_DATABASE_URL') if os.environ.get(
+    'ENVIRONMENT') == "development" else os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
