@@ -33,9 +33,9 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     profile_pic = db.Column(
-        db.String(20), nullable=False, default='profile.png')
+        db.String(), nullable=False, default='profile.png')
     profile_bg = db.Column(
-        db.String(20), nullable=False)
+        db.String(), nullable=False)
     likes_count = db.Column(db.Integer, nullable=False, default=0)
     about = db.Column(db.String(130), nullable=False, default=about)
     stories = db.relationship('Story', backref='author', lazy=True)

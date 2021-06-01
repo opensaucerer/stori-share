@@ -4,3 +4,4 @@ __pycache__
 articles.py
 test.py
 dumps.html
+.env
