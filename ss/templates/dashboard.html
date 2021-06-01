@@ -126,137 +126,107 @@
       <!-- rendering sticky alerts end -->
 
       <!-- Navbar start -->
-      <nav class="navbar">
-        <a href="{{ url_for('home') }}" class="navbar-brand ml-10 ml-sm-15">
-          StoriShare
-        </a>
-        <ul class="navbar-nav hidden-sm-and-down">
-          <li class="nav-item">
-            <a href="{{ url_for('home') }}" class="nav-link">Stories Feed</a>
-          </li>
+      <div class="container">
+        <nav class="navbar">
+          <a href="{{ url_for('home') }}" class="navbar-brand ml-10 ml-sm-15">
+            StoriShare
+          </a>
+          <ul class="navbar-nav hidden-sm-and-down">
+            <li class="nav-item">
+              <a href="{{ url_for('home') }}" class="nav-link">Stories Feed</a>
+            </li>
 
-          <!-- Changing nav item based on user session (show {logout} if user is {signed in}) -->
-          {% if current_user.is_authenticated %}
+            <!-- Changing nav item based on user session (show {logout} if user is {signed in}) -->
+            {% if current_user.is_authenticated %}
 
-          <li class="nav-item">
-            <a href="{{ url_for('collections') }}" class="nav-link"
-              >Collections</a
-            >
-          </li>
-          <li class="nav-item active">
-            <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
-          </li>
-          {% else %}
-          <li class="nav-item">
-            <a href="{{ url_for('about') }}" class="nav-link">About</a>
-          </li>
-          <li class="nav-item active">
-            <a href="{{ url_for('register') }}" class="nav-link">Sign Up</a>
-          </li>
-          {% endif %}
-        </ul>
-        <!-- Changing nav item based on user session (show {logout} if user is {signed in}) end -->
-
-        <div class="navbar-content ml-auto">
-          {% if current_user.is_authenticated %}
-          <div class="navbar-content ml-auto">
-            <!-- Create New Story -->
-            <a
-              data-toggle="tooltip"
-              data-title="New Story"
-              data-placement="left"
-              href="{{ url_for('new_story') }}"
-              style="padding-right: 0.3rem"
-              class="nav-link"
-            >
-              <i
-                class="fa fa-pen"
-                aria-hidden="true"
-                style="font-size: 18px"
-              ></i>
-            </a>
-            <!-- Create New Story End-->
-            <!-- Message icon -->
-            <a
-              href="{{ url_for('new_story') }}"
-              style="padding-right: 0.3rem"
-              class="nav-link"
-            >
-              <span
-                class="badge badge-primary badge-pill"
-                style="margin-right: 4px"
-                >6</span
+            <li class="nav-item">
+              <a href="{{ url_for('collections') }}" class="nav-link"
+                >Collections</a
               >
-              <i
-                class="fa fa-envelope"
-                aria-hidden="true"
-                style="font-size: 18px"
-              ></i>
-            </a>
-            <!-- message icon end -->
+            </li>
+            <li class="nav-item active">
+              <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a href="{{ url_for('about') }}" class="nav-link">About</a>
+            </li>
+            <li class="nav-item active">
+              <a href="{{ url_for('register') }}" class="nav-link">Sign Up</a>
+            </li>
             {% endif %}
-
-            <!-- Search Icon -->
-            <a id="search" class="nav-link">
-              <i
-                class="fa fa-search"
-                aria-hidden="true"
-                style="font-size: 18px"
-              ></i>
-            </a>
-            <!-- Search Icon End -->
-
-            <!-- Dark Mode Toggler -->
-            <div class="custom-switch">
-              <input
-                type="checkbox"
-                id="switch-2"
-                value=""
-                checked="checked"
-                aria-label="Toggle dark mode"
-              />
-              <label for="switch-2" class="mr-5"></label>
-            </div>
-          </div>
-          <!-- Dark Mode Toggler End -->
-
-          <!-- Changing nav item based on user session (show {logout} if user is {signed in}) -->
-          {% if current_user.is_authenticated %}
-
-          <a
-            href="{{ url_for('dashboard', username=current_user.username) }}"
-            class="hidden-sm-and-down"
-          >
-            <img
-              src="{{ url_for('static', filename='img/profile_pic/' + current_user.profile_pic) }}"
-              class="nav-icon"
-              alt="Profile Picture"
-              style="border: 1px solid grey; border-radius: 50%"
-            />
-          </a>
-          {% else %}
-
-          <a
-            href="{{ url_for('login') }}"
-            class="btn btn-primary hidden-sm-and-down"
-            role="button"
-          >
-            Sign In
-          </a>
-          {% endif %}
+          </ul>
           <!-- Changing nav item based on user session (show {logout} if user is {signed in}) end -->
 
-          <!-- Dropdown Menu -->
-
-          <div class="dropdown with-arrow hidden-md-and-up">
-            <!-- Adding user profile picture as menu icon is logged in -->
+          <div class="navbar-content ml-auto">
             {% if current_user.is_authenticated %}
-            <div
-              data-toggle="dropdown"
-              type="button"
-              id="navbar-dropdown-toggle-btn"
-              aria-haspopup="true"
-              aria-expanded="false"
+            <div class="navbar-content ml-auto">
+              <!-- Create New Story -->
+              <a
+                data-toggle="tooltip"
+                data-title="New Story"
+                data-placement="left"
+                href="{{ url_for('new_story') }}"
+                style="padding-right: 0.3rem"
+                class="nav-link"
+              >
+                <i
+                  class="fa fa-pen"
+                  aria-hidden="true"
+                  style="font-size: 18px"
+                ></i>
+              </a>
+              <!-- Create New Story End-->
+              <!-- Message icon -->
+              <a
+                href="{{ url_for('new_story') }}"
+                style="padding-right: 0.3rem"
+                class="nav-link"
+              >
+                <span
+                  class="badge badge-primary badge-pill"
+                  style="margin-right: 4px"
+                  >6</span
+                >
+                <i
+                  class="fa fa-envelope"
+                  aria-hidden="true"
+                  style="font-size: 18px"
+                ></i>
+              </a>
+              <!-- message icon end -->
+              {% endif %}
+
+              <!-- Search Icon -->
+              <a id="search" class="nav-link">
+                <i
+                  class="fa fa-search"
+                  aria-hidden="true"
+                  style="font-size: 18px"
+                ></i>
+              </a>
+              <!-- Search Icon End -->
+
+              <!-- Dark Mode Toggler -->
+              <div class="custom-switch">
+                <input
+                  type="checkbox"
+                  id="switch-2"
+                  value=""
+                  checked="checked"
+                  aria-label="Toggle dark mode"
+                />
+                <label for="switch-2" class="mr-5"></label>
+              </div>
+            </div>
+            <!-- Dark Mode Toggler End -->
+
+            <!-- Changing nav item based on user session (show {logout} if user is {signed in}) -->
+            {% if current_user.is_authenticated %}
+
+            <a
+              href="{{ url_for('dashboard', username=current_user.username) }}"
+              class="hidden-sm-and-down"
             >
               <img
                 src="{{ url_for('static', filename='img/profile_pic/' + current_user.profile_pic) }}"
@@ -264,76 +234,108 @@
                 alt="Profile Picture"
                 style="border: 1px solid grey; border-radius: 50%"
               />
-            </div>
+            </a>
             {% else %}
 
-            <button
-              class="btn"
-              data-toggle="dropdown"
-              type="button"
-              style="width: 70px"
-              id="navbar-dropdown-toggle-btn-1"
+            <a
+              href="{{ url_for('login') }}"
+              class="btn btn-primary hidden-sm-and-down"
+              role="button"
             >
-              Menu
-              <i class="fa fa-angle-down" aria-hidden="true"></i>
-            </button>
+              Sign In
+            </a>
             {% endif %}
-            <!-- Adding user profile picture as menu icon is logged in end -->
+            <!-- Changing nav item based on user session (show {logout} if user is {signed in}) end -->
 
-            <div
-              class="dropdown-menu dropdown-menu-right"
-              aria-labelledby="navbar-dropdown-toggle-btn"
-            >
-              <a href="/" class="dropdown-item">Stories Feed</a>
+            <!-- Dropdown Menu -->
 
-              <!-- Changing nav item based on user session (show {logout} if user is {signed in}) -->
+            <div class="dropdown with-arrow hidden-md-and-up">
+              <!-- Adding user profile picture as menu icon is logged in -->
               {% if current_user.is_authenticated %}
-              <a href="{{ url_for('collections') }}" class="dropdown-item"
-                >Collections</a
+              <div
+                data-toggle="dropdown"
+                type="button"
+                id="navbar-dropdown-toggle-btn"
+                aria-haspopup="true"
+                aria-expanded="false"
               >
-              <a
-                href="{{ url_for('logout') }}"
-                style="color: blue"
-                class="dropdown-item"
-                >Logout</a
-              >
-              <div class="dropdown-divider"></div>
-
-              <div class="dropdown-content">
-                <a
-                  href="{{ url_for('dashboard', username=current_user.username) }}"
-                  class="btn btn-primary btn-block"
-                  role="button"
-                >
-                  <span class="ml-5">Dashboard</span>
-                </a>
+                <img
+                  src="{{ url_for('static', filename='img/profile_pic/' + current_user.profile_pic) }}"
+                  class="nav-icon"
+                  alt="Profile Picture"
+                  style="border: 1px solid grey; border-radius: 50%"
+                />
               </div>
               {% else %}
-              <a href="{{ url_for('about') }}" class="dropdown-item">About</a>
-              <a
-                href="{{ url_for('register') }}"
-                style="color: blue"
-                class="dropdown-item"
-                >Sign Up</a
-              >
-              <div class="dropdown-divider"></div>
-              <div class="dropdown-content">
-                <a
-                  href="{{ url_for('login') }}"
-                  class="btn btn-primary btn-block"
-                  role="button"
-                >
-                  <span class="ml-5">Sign In</span>
-                </a>
-              </div>
-              {% endif %}
-              <!-- Changing nav item based on user session (show {logout} if user is {signed in}) end -->
-            </div>
-          </div>
 
-          <!-- Dropdown Menu End -->
-        </div>
-      </nav>
+              <button
+                class="btn"
+                data-toggle="dropdown"
+                type="button"
+                style="width: 70px"
+                id="navbar-dropdown-toggle-btn-1"
+              >
+                Menu
+                <i class="fa fa-angle-down" aria-hidden="true"></i>
+              </button>
+              {% endif %}
+              <!-- Adding user profile picture as menu icon is logged in end -->
+
+              <div
+                class="dropdown-menu dropdown-menu-right"
+                aria-labelledby="navbar-dropdown-toggle-btn"
+              >
+                <a href="/" class="dropdown-item">Stories Feed</a>
+
+                <!-- Changing nav item based on user session (show {logout} if user is {signed in}) -->
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('collections') }}" class="dropdown-item"
+                  >Collections</a
+                >
+                <a
+                  href="{{ url_for('logout') }}"
+                  style="color: blue"
+                  class="dropdown-item"
+                  >Logout</a
+                >
+                <div class="dropdown-divider"></div>
+
+                <div class="dropdown-content">
+                  <a
+                    href="{{ url_for('dashboard', username=current_user.username) }}"
+                    class="btn btn-primary btn-block"
+                    role="button"
+                  >
+                    <span class="ml-5">Dashboard</span>
+                  </a>
+                </div>
+                {% else %}
+                <a href="{{ url_for('about') }}" class="dropdown-item">About</a>
+                <a
+                  href="{{ url_for('register') }}"
+                  style="color: blue"
+                  class="dropdown-item"
+                  >Sign Up</a
+                >
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-content">
+                  <a
+                    href="{{ url_for('login') }}"
+                    class="btn btn-primary btn-block"
+                    role="button"
+                  >
+                    <span class="ml-5">Sign In</span>
+                  </a>
+                </div>
+                {% endif %}
+                <!-- Changing nav item based on user session (show {logout} if user is {signed in}) end -->
+              </div>
+            </div>
+
+            <!-- Dropdown Menu End -->
+          </div>
+        </nav>
+      </div>
       <!-- Navbar end -->
 
       <!-- Login Modal -->
@@ -531,279 +533,286 @@
 
       <!-- Delete Story Modal end -->
 
-      <div
-        class="content-wrapper"
-        style="top: 0rem !important; height: 100% !important"
-      >
+      <div class="content-wrapper" style="top: 5rem">
         <!-- Rendering content to be overwritten -->
 
         <!-- Dashboard Container -->
-        <main style="margin-bottom: 5rem">
-          <!-- Dashboard Background Image and Info Container -->
-          <div
-            class="card"
-            style="padding: 0 !important; margin-left: 0; margin-right: 0"
-          >
-            <!-- Dashboard profile background image -->
-            <div class="bg-con" style="height: 25rem">
+
+        <div class="container">
+          <main style="margin-bottom: 5rem">
+            <!-- Dashboard Background Image and Info Container -->
+            <div
+              class="card"
+              style="padding: 0 !important; margin-left: 0; margin-right: 0"
+            >
+              <!-- Dashboard profile background image -->
+              <div class="bg-con" style="height: 25rem">
+                <img
+                  style="
+                    width: 100%;
+                    height: 100% !important;
+                    object-fit: cover;
+                  "
+                  src="{{ bg_img }}"
+                  alt="Profile Background"
+                />
+              </div>
+              <!-- Dashboard profile background image end-->
+
+              <!-- Displaying profile picture -->
               <img
-                style="width: 100%; height: 100% !important; object-fit: cover"
-                src="{{ bg_img }}"
-                alt="Profile Background"
+                style="background: rgb(73, 71, 71)"
+                src="{{ profile_pic }}"
+                class="profile-picture"
+                alt="Profile Picture"
               />
-            </div>
-            <!-- Dashboard profile background image end-->
 
-            <!-- Displaying profile picture -->
-            <img
-              style="background: rgb(73, 71, 71)"
-              src="{{ profile_pic }}"
-              class="profile-picture"
-              alt="Profile Picture"
-            />
+              <!-- Displaying profile picture end -->
 
-            <!-- Displaying profile picture end -->
+              <!-- storeis, likes, followers, following, and username container -->
 
-            <!-- storeis, likes, followers, following, and username container -->
-
-            <span class="username">{{ username }}</span>
-            <div class="d-flex info_con">
-              <div class="d-flex flex-column stories">
-                <span class="stories-count">{{ post_count }}</span>
-                <span class="stories-title">STORIES</span>
-              </div>
-
-              <div class="d-flex flex-column likes like">
-                <span id="likes-count" class="likes-count"
-                  >{{ user.likes_count }}</span
-                >
-                <span class="likes-title">LIKES</span>
-              </div>
-              <div class="d-flex flex-column likes">
-                <a
-                  href="{{ url_for('following', username=username) }}"
-                  class="link-nohover"
-                  ><span class="likes-count">{{user.followed.count()}}</span></a
-                >
-                <a
-                  href="{{ url_for('following', username=username) }}"
-                  class="link-nohover"
-                  ><span class="likes-title">FOLLOWING</span></a
-                >
-              </div>
-              <div class="d-flex flex-column likes">
-                <a
-                  href="{{ url_for('followers', username=username) }}"
-                  class="link-nohover"
-                  ><span id="followers-count" class="likes-count"
-                    >{{user.followers.count()}}</span
-                  ></a
-                >
-                <a
-                  href="{{ url_for('followers', username=username) }}"
-                  class="link-nohover"
-                >
-                  <span class="likes-title">FOLLOWERS</span></a
-                >
-              </div>
-
-              <!-- storeis, likes, followers, following, and username container  end -->
-
-              <!-- Edit Profile Using Modal -->
-              {% if current_user.is_authenticated %} {% if current_user.username
-              == username %}
-              <div class="d-flex flex-column likes">
-                <a href="#modal-1" class="btn active btn-sm" role="button">
-                  <i class="fa fa-pen" style="color: #1890ff"></i> Edit
-                </a>
-              </div>
-              <!-- Edit Profile Using Modal end -->
-
-              <!-- follow and message container -->
-              {% elif not current_user.is_following(user) %}
-
-              <div class="d-flex flex-column likes">
-                <a href="" class="likes-count link-nohover"
-                  ><i class="fa fa-envelope"></i
-                ></a>
-                <a href="" class="link-nohover"><span>MESSAGE</span></a>
-              </div>
-              <div class="d-flex flex-column likes follow">
-                <a class="btn btn-primary btn-sm">Follow</a>
-              </div>
-              {% else %}
-
-              <div class="d-flex flex-column likes">
-                <a href="" class="likes-count link-nohover"
-                  ><i class="fa fa-envelope"></i
-                ></a>
-                <a href="" class="link-nohover"><span>MESSAGE</span></a>
-              </div>
-              <div class="d-flex flex-column likes follow">
-                <a class="btn btn-primary btn-sm following">Unfollow</a>
-              </div>
-              {% endif %} {% else %}
-              <div class="d-flex flex-column likes">
-                <a href="" class="likes-count link-nohover"
-                  ><i class="fa fa-envelope"></i
-                ></a>
-                <a href="" class="link-nohover"><span>MESSAGE</span></a>
-              </div>
-              <div class="d-flex flex-column likes follow">
-                <a class="btn btn-primary btn-sm">Follow</a>
-              </div>
-              {% endif %}
-            </div>
-
-            <!-- follow and message container end -->
-          </div>
-
-          <!-- Dashboard Background Image and Info Container end -->
-
-          <div class="d-flex justify-content-between">
-            <!-- About Section -->
-            <div class="col-auto">
-              <div class="ca w-300">
-                <div class="w-auto">
-                  <div class="card">
-                    <h2 class="card-title">About</h2>
-                    <p>{{ about }}</p>
-                  </div>
+              <span class="username">{{ username }}</span>
+              <div class="d-flex info_con">
+                <div class="d-flex flex-column stories">
+                  <span class="stories-count">{{ post_count }}</span>
+                  <span class="stories-title">STORIES</span>
                 </div>
-              </div>
-            </div>
-            <!-- About Section End -->
 
-            <!-- Post Section -->
-
-            <div>
-              {% if current_user.username == username and post_count == 0 %}
-
-              <div>
-                <div class="card box-shadow w-300 text-center">
-                  <p>Publish Your First Story Now</p>
-                  <a href="{{ url_for('new_story') }}">
-                    <i class="fa fa-plus" style="font-size: 12rem"></i>
-                  </a>
-                  <p>We Can't Wait To Read Your Stories</p>
+                <div class="d-flex flex-column likes like">
+                  <span id="likes-count" class="likes-count"
+                    >{{ user.likes_count }}</span
+                  >
+                  <span class="likes-title">LIKES</span>
                 </div>
-              </div>
-
-              {% elif post_count == 0 %}
-              <div>
-                <div class="card box-shadow w-300 text-center">
-                  <p>
-                    Unfortunately,
-                    <a class="link-nohover">@{{ username }}</a> Has No Stories
-                  </p>
-                  <a class="sad">
-                    <i class="fa fa-sad-tear" style="font-size: 12rem"></i>
-                  </a>
-                </div>
-              </div>
-              {% endif %}
-
-              <!-- Looping over posts -->
-              {% for post in posts %}
-
-              <div class="card box-shadow w-300">
-                <!-- Rendering post image -->
-                <div class="img-con">
-                  <img
-                    width="100%"
-                    height="100%"
-                    style="object-fit: cover"
-                    class="card-img-top"
-                    src="{{ url_for('static', filename='img/story_image/' + post.story_image) }}"
-                    alt="Image
-            load Failed"
-                  />
-                </div>
-                <!-- Rendering post image end -->
-
-                <div class="card-body">
+                <div class="d-flex flex-column likes">
                   <a
+                    href="{{ url_for('following', username=username) }}"
                     class="link-nohover"
-                    href="{{ url_for('story', id=post.id, title='-'.join(story.query.get(post.id).title.split(' '))) }}"
+                    ><span class="likes-count"
+                      >{{user.followed.count()}}</span
+                    ></a
                   >
-                    <p class="font-size-16">{{ post.title }}</p></a
+                  <a
+                    href="{{ url_for('following', username=username) }}"
+                    class="link-nohover"
+                    ><span class="likes-title">FOLLOWING</span></a
                   >
-                  <div class="d-flex align-items-center">
-                    {% if current_user.is_authenticated and
-                    current_user.username == username %}
+                </div>
+                <div class="d-flex flex-column likes">
+                  <a
+                    href="{{ url_for('followers', username=username) }}"
+                    class="link-nohover"
+                    ><span id="followers-count" class="likes-count"
+                      >{{user.followers.count()}}</span
+                    ></a
+                  >
+                  <a
+                    href="{{ url_for('followers', username=username) }}"
+                    class="link-nohover"
+                  >
+                    <span class="likes-title">FOLLOWERS</span></a
+                  >
+                </div>
 
-                    <a
-                      href="#modal-2"
-                      class="btn btn-default btn-sm"
-                      type="button"
-                      id="delete"
-                      data-storyid="{{ post.id }}"
-                      >Delete</a
-                    >
+                <!-- storeis, likes, followers, following, and username container  end -->
 
-                    <div class="btn-group">
-                      <div class="btn-group">
-                        <a
-                          type="button"
-                          class="btn active btn-sm"
-                          href="{{ url_for('edit_story', id=post.id) }}"
-                        >
-                          Edit
-                        </a>
-                      </div>
+                <!-- Edit Profile Using Modal -->
+                {% if current_user.is_authenticated %} {% if
+                current_user.username == username %}
+                <div class="d-flex flex-column likes">
+                  <a href="#modal-1" class="btn active btn-sm" role="button">
+                    <i class="fa fa-pen" style="color: #1890ff"></i> Edit
+                  </a>
+                </div>
+                <!-- Edit Profile Using Modal end -->
+
+                <!-- follow and message container -->
+                {% elif not current_user.is_following(user) %}
+
+                <div class="d-flex flex-column likes">
+                  <a href="" class="likes-count link-nohover"
+                    ><i class="fa fa-envelope"></i
+                  ></a>
+                  <a href="" class="link-nohover"><span>MESSAGE</span></a>
+                </div>
+                <div class="d-flex flex-column likes follow">
+                  <a class="btn btn-primary btn-sm">Follow</a>
+                </div>
+                {% else %}
+
+                <div class="d-flex flex-column likes">
+                  <a href="" class="likes-count link-nohover"
+                    ><i class="fa fa-envelope"></i
+                  ></a>
+                  <a href="" class="link-nohover"><span>MESSAGE</span></a>
+                </div>
+                <div class="d-flex flex-column likes follow">
+                  <a class="btn btn-primary btn-sm following">Unfollow</a>
+                </div>
+                {% endif %} {% else %}
+                <div class="d-flex flex-column likes">
+                  <a href="" class="likes-count link-nohover"
+                    ><i class="fa fa-envelope"></i
+                  ></a>
+                  <a href="" class="link-nohover"><span>MESSAGE</span></a>
+                </div>
+                <div class="d-flex flex-column likes follow">
+                  <a class="btn btn-primary btn-sm">Follow</a>
+                </div>
+                {% endif %}
+              </div>
+
+              <!-- follow and message container end -->
+            </div>
+
+            <!-- Dashboard Background Image and Info Container end -->
+
+            <div class="d-flex justify-content-between">
+              <!-- About Section -->
+              <div class="col-auto">
+                <div class="ca w-300">
+                  <div class="w-auto">
+                    <div class="card">
+                      <h2 class="card-title">About</h2>
+                      <p>{{ about }}</p>
                     </div>
-                    {% else %}
-
-                    <div id="lcon">
-                      {% if current_user.is_authenticated %} {% if
-                      current_user.has_liked_story(post) %}
-                      <i
-                        id="story-id"
-                        data-storyid="{{ post.id }}"
-                        class="fa fa-heart clicked"
-                      ></i>
-                      {% else %}
-                      <i
-                        id="story-id"
-                        data-storyid="{{ post.id }}"
-                        class="fa fa-heart"
-                      ></i>
-                      {% endif %} {% else %}
-                      <i
-                        id="story-id"
-                        data-storyid="{{ post.id }}"
-                        class="fa fa-heart"
-                      ></i>
-                      {% endif %}
-
-                      <span class="lspan">{{ post.likes.count() }}</span>
-                    </div>
-
-                    <div class="btn-group">
-                      <div class="btn-group">
-                        <a
-                          type="button"
-                          class="btn active btn-sm"
-                          href="{{ url_for('story', id=post.id, title='read') }}"
-                        >
-                          Read
-                        </a>
-                      </div>
-                    </div>
-
-                    {% endif %}
                   </div>
                 </div>
               </div>
+              <!-- About Section End -->
 
-              {% endfor %}
+              <!-- Post Section -->
 
-              <!-- Looping over posts end-->
+              <div>
+                {% if current_user.username == username and post_count == 0 %}
+
+                <div>
+                  <div class="card box-shadow w-300 text-center">
+                    <p>Publish Your First Story Now</p>
+                    <a href="{{ url_for('new_story') }}">
+                      <i class="fa fa-plus" style="font-size: 12rem"></i>
+                    </a>
+                    <p>We Can't Wait To Read Your Stories</p>
+                  </div>
+                </div>
+
+                {% elif post_count == 0 %}
+                <div>
+                  <div class="card box-shadow w-300 text-center">
+                    <p>
+                      Unfortunately,
+                      <a class="link-nohover">@{{ username }}</a> Has No Stories
+                    </p>
+                    <a class="sad">
+                      <i class="fa fa-sad-tear" style="font-size: 12rem"></i>
+                    </a>
+                  </div>
+                </div>
+                {% endif %}
+
+                <!-- Looping over posts -->
+                {% for post in posts %}
+
+                <div class="card box-shadow w-300">
+                  <!-- Rendering post image -->
+                  <div class="img-con">
+                    <img
+                      width="100%"
+                      height="100%"
+                      style="object-fit: cover"
+                      class="card-img-top"
+                      src="{{ url_for('static', filename='img/story_image/' + post.story_image) }}"
+                      alt="Image
+            load Failed"
+                    />
+                  </div>
+                  <!-- Rendering post image end -->
+
+                  <div class="card-body">
+                    <a
+                      class="link-nohover"
+                      href="{{ url_for('story', id=post.id, title='-'.join(story.query.get(post.id).title.split(' '))) }}"
+                    >
+                      <p class="font-size-16">{{ post.title }}</p></a
+                    >
+                    <div class="d-flex align-items-center">
+                      {% if current_user.is_authenticated and
+                      current_user.username == username %}
+
+                      <a
+                        href="#modal-2"
+                        class="btn btn-default btn-sm"
+                        type="button"
+                        id="delete"
+                        data-storyid="{{ post.id }}"
+                        >Delete</a
+                      >
+
+                      <div class="btn-group">
+                        <div class="btn-group">
+                          <a
+                            type="button"
+                            class="btn active btn-sm"
+                            href="{{ url_for('edit_story', id=post.id) }}"
+                          >
+                            Edit
+                          </a>
+                        </div>
+                      </div>
+                      {% else %}
+
+                      <div id="lcon">
+                        {% if current_user.is_authenticated %} {% if
+                        current_user.has_liked_story(post) %}
+                        <i
+                          id="story-id"
+                          data-storyid="{{ post.id }}"
+                          class="fa fa-heart clicked"
+                        ></i>
+                        {% else %}
+                        <i
+                          id="story-id"
+                          data-storyid="{{ post.id }}"
+                          class="fa fa-heart"
+                        ></i>
+                        {% endif %} {% else %}
+                        <i
+                          id="story-id"
+                          data-storyid="{{ post.id }}"
+                          class="fa fa-heart"
+                        ></i>
+                        {% endif %}
+
+                        <span class="lspan">{{ post.likes.count() }}</span>
+                      </div>
+
+                      <div class="btn-group">
+                        <div class="btn-group">
+                          <a
+                            type="button"
+                            class="btn active btn-sm"
+                            href="{{ url_for('story', id=post.id, title='read') }}"
+                          >
+                            Read
+                          </a>
+                        </div>
+                      </div>
+
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+
+                {% endfor %}
+
+                <!-- Looping over posts end-->
+              </div>
+
+              <!-- Post Section End -->
             </div>
+          </main>
+        </div>
 
-            <!-- Post Section End -->
-          </div>
-        </main>
         <!-- Dashboard Container end -->
         <!-- Rending content to be overwritten end -->
 

@@ -13,6 +13,9 @@ main {
 .flex-column {
     padding-left: 20px !important;
 }
+.navbar-fixed-bottom{
+    z-index: 10000;
+}
 
 
 
